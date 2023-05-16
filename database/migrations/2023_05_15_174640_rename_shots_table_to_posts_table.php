@@ -11,13 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shots', function (Blueprint $table) {
-            $table->id();
-            $table->integer('pointX');
-            $table->integer('pointY');
-            $table->integer('pointNumber');
-            $table->integer('shotCount');
-        });
+        Schema::rename('shots', 'posts');
     }
 
     /**
@@ -25,6 +19,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shots');
+        Schema::table('shots', function (Blueprint $table) {
+            //
+        });
     }
 };

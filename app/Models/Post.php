@@ -9,7 +9,17 @@ class Post extends Model
 {
     use HasFactory;
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    protected $fillable = [
+        'date_id',
+        'pointX',
+        'pointY',
+        'pointNumber',
+        'shotCount'
+    ];
+
+
+    public function date()
+    {
+        return $this->belongsTo(Date::class);
     }
 }

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('shots', function (Blueprint $table) {
-            $table->foreignId('post_id')->after('pointNumber');
-        });
+        // 
+        Schema::rename('posts', 'dates');
     }
 
     /**
@@ -21,8 +20,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('shots', function (Blueprint $table) {
-            $table->dropColumn('post_id');
+        Schema::table('posts', function (Blueprint $table) {
+            //
         });
     }
 };
