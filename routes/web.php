@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource('post', PostController::class)->only(['create', 'store'])->names([
+Route::resource('post', PostController::class)->only(['create', 'store',])->names([
     'create' => 'post.create',
     'store' => 'post.store',
 ]);
