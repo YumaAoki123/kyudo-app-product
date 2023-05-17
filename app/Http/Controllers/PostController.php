@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use App\Models\Date;
+use Illuminate\Support\Facades\DB; // 追加
+use Carbon\Carbon;
+
+
 class PostController extends Controller
 {
     /**
@@ -48,40 +54,59 @@ class PostController extends Controller
 
 
 
+
+
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(Request $request)
     {
+        $selectedDate = $request->session()->get('selected_date');
+
+        // try {
+        //     $jsonData = $request->getContent();
+        //     $data = json_decode($jsonData, true);
+
+        //     return response()->json(['success' => true]);
+        // } catch (\Exception $e) {
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
+
+
+
 
         try {
+            DB::beginTransaction();
+
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
 
+            $user = User::find(auth()->id());
+            $date = new Date();
+            $date->selectedDate = Carbon::createFromFormat('m/d/Y', $selectedDate)->format('Y-m-d');
+
+            $user->dates()->save($date);
+
+            foreach ($data as $item) {
+                $post = new Post;
+                $post->pointX = $item['x'];
+                $post->pointY = $item['y'];
+                $post->pointNumber = $item['pointNumber'];
+                $post->shotCount = $item['shotCount'];
+                $post->date_id = $date->id;
+                $post->save();
+            }
+
+            DB::commit();
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
+            DB::rollback();
+
             return response()->json(['error' => $e->getMessage()]);
         }
-
-
-        // データを確認
-        dd($request->all());
-
-        // セッションから日付を取得する
-        // $selectedDate = $request->session()->get('selected_date');
-        // $dateId = $request->input('date_id');
-
-        // $post = new Post;
-        // $post->pointX = $request->input('pointX');
-        // $post->pointY = $request->input('pointY');
-        // $post->pointNumber = $request->input('pointNumber');
-        // $post->shotCount = $request->input('shotCount');
-        // $post->date_id = $dateId;
-        // $post->save();
-
-        // $date = new Date();
-        // $date->date = $selectedDate;
-        // $date->save();
     }
 
     /**

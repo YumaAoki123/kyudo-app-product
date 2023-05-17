@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('shots', 'posts');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->foreignId('date_id')->constrained('dates');
+        });
     }
 
     /**
@@ -19,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('shots', function (Blueprint $table) {
+        Schema::table('posts', function (Blueprint $table) {
             //
         });
     }
