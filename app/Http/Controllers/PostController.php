@@ -16,15 +16,70 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return view('post.index');
+    }
+
+
+    public function getPostData(Request $request)
+    {
+        // dd($request->all());
+        $posts = []; // $posts変数を初期化
+
+
+
+        if ($request->has('from') && $request->has('to')) {
+            $start_date = $request->input('from');
+            $end_date = $request->input('to');
+
+            $userId = auth()->user()->id; // ログインユーザのIDを取得するなど、適切な方法でユーザIDを取得してください
+
+            // 日付テーブルと的中データテーブルのリレーションを考慮してデータを取得
+            $posts = Post::whereHas('date', function ($query) use ($start_date, $end_date, $userId) {
+                $query->where('user_id', $userId)
+                    ->whereBetween('selectedDate', [$start_date, $end_date]);
+            })->get();
+        } else {
+            $posts = []; // データが存在しない場合に空の配列として初期化
+        }
+
+
+        // 統計データの表示内容の計算式
+        $totalCount = count($posts);
+        $hitCount = 0;
+        $missCount = 0;
+
+        foreach ($posts as $post) {
+            $x = $post->pointX - 200;
+            $y = $post->pointY - 200;
+
+            // x^2 + y^2 <= 200^2 の円内にあるかどうかを判定
+            if ($x * $x + $y * $y <= 200 * 200) {
+                $hitCount++; // 的中したポイントをカウント
+            } else {
+                $missCount++; // 外れたポイントをカウント
+            }
+        }
+
+        $accuracy = ($totalCount > 0) ? ($hitCount / $totalCount) * 100 : 0;
+
+        $statisticsData = [
+            'totalCount' => $totalCount,
+            'hitCount' => $hitCount,
+            'missCount' => $missCount,
+            'accuracy' => $accuracy,
+        ];
+
+        return view('post.index', [
+            'posts' => $posts,
+            'statisticsData' => $statisticsData
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-
 
     public function create(Request $request)
     {
@@ -52,10 +107,6 @@ class PostController extends Controller
     }
 
 
-
-
-
-
     /**
      * Store a newly created resource in storage.
      */
@@ -64,18 +115,6 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $selectedDate = $request->session()->get('selected_date');
-
-        // try {
-        //     $jsonData = $request->getContent();
-        //     $data = json_decode($jsonData, true);
-
-        //     return response()->json(['success' => true]);
-        // } catch (\Exception $e) {
-        //     return response()->json(['error' => $e->getMessage()]);
-        // }
-
-
-
 
         try {
             DB::beginTransaction();
@@ -101,17 +140,34 @@ class PostController extends Controller
 
             DB::commit();
 
-            return response()->json(['success' => true]);
+            // return response()->json(['success' => true]);
+            return redirect()->route('post.result');
         } catch (\Exception $e) {
             DB::rollback();
 
             return response()->json(['error' => $e->getMessage()]);
+            // エラーメッセージなどを設定してリダイレクト
+            // return redirect()->back()->with('error', '保存に失敗しました。もう一度お試しください。');
         }
+        // dd('Save complete');
     }
+
+
+    public function showResult(Request $request)
+    {
+
+        return view('post.result');
+    }
+
+
 
     /**
      * Display the specified resource.
      */
+
+
+
+
     public function show(Post $post)
     {
         //

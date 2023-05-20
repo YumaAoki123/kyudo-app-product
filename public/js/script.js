@@ -80,27 +80,6 @@ clearButton.addEventListener("click", function() { // ボタンにクリック�
 });
 
 
-
-const submitButton = document.getElementById("submitButton");
-
-submitButton.addEventListener("click", function(event) {
-  event.preventDefault(); // フォームのデフォルトの送信動作をキャンセル
-  
-  // ポイントデータをサーバーに送信
-  sendDataToServer();
-
-    // 別のページに遷移
-
-    // window.location.href = "statistics.php";
-
-    // ターゲットと射撃回数をリセット
-  resetTarget();
-  shotCountSelect.value = "";
-
-});
-
-
-
 function sendDataToServer() {
   // ポイントデータをJSON形式に変換
   const jsonData = JSON.stringify(pointsData);
@@ -128,3 +107,25 @@ function sendDataToServer() {
   // データを送信
   xhr.send(jsonData);
 }
+
+
+const submitButton = document.getElementById("submitButton");
+
+submitButton.addEventListener("click", function(event) {
+  event.preventDefault(); // フォームのデフォルトの送信動作をキャンセル
+  
+  // ポイントデータをサーバーに送信
+  sendDataToServer();
+
+    // 別のページに遷移
+
+    // window.location.href = "/kyudo-app-product/public/result.blade.php";
+
+    // ターゲットと射撃回数をリセット
+  resetTarget();
+  shotCountSelect.value = "";
+
+});
+
+
+

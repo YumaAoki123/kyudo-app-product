@@ -33,7 +33,6 @@
             });
         });
     </script>
-
 </head>
 
 <body>
@@ -52,6 +51,9 @@
                     <p>今週の的中率</p>
                     <br>
                     <br>
+                    <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
+
+
                 </div>
 
             </div>
