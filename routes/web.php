@@ -30,9 +30,18 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource('post', PostController::class)->only(['create', 'store',])->names([
+Route::resource('post', PostController::class)->only(['create', 'store'])->names([
     'create' => 'post.create',
     'store' => 'post.store',
 ]);
 
 Route::post('/saveSelectedDate', 'App\Http\Controllers\PostController@saveSelectedDate')->name('post.saveSelectedDate');
+
+Route::get('/post/result', function () {
+    return view('post.result');
+})->name('post.result');
+
+Route::get('/post/index', [PostController::class, 'index'])->name('post.index');
+Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.process');
+
+// Route::post('/getPostData', [PostController::class, 'getPostData']);
