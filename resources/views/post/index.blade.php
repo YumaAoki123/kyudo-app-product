@@ -54,10 +54,26 @@
 
                     <div class="container">
                         <div class="row justify-content-center">
+
                             <div class="col-6">
                                 <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
 
-                                    <div class="ring ring-0"></div>
+                                    <div class="ring ring-0">
+                                        <div class="quadrant" id="quadrant1">
+                                            <div class="percentage" id="percentage1">0%</div>
+                                        </div>
+                                        <div class="quadrant" id="quadrant2">
+                                            <div class="percentage" id="percentage2">0%</div>
+                                        </div>
+                                        <div class="quadrant" id="quadrant3">
+                                            <div class="percentage" id="percentage3">0%</div>
+                                        </div>
+                                        <div class="quadrant" id="quadrant4">
+                                            <div class="percentage" id="percentage4">0%</div>
+                                        </div>
+
+                                    </div>
+
                                     <div class="ring ring-1"></div>
                                     <div class="ring ring-2"></div>
                                     <div class="ring ring-3"></div>
@@ -71,19 +87,21 @@
                                     @php
                                     $x = $post->pointX;
                                     $y = $post->pointY;
+
                                     @endphp
-                                    <div class="point" style="top: {{ $y }}px; left: {{ $x }}px;"></div>
+                                    <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
+
                                     @endforeach
                                     @endif
+
+
+
+
+
                                 </div>
                             </div>
-                        </div>
-
-                        <br>
-                        <br>
 
 
-                        <div class="row justify-content-center">
                             <div class="col-6">
 
                                 <table class="table">
@@ -114,6 +132,18 @@
                                     </tbody>
                                 </table>
                             </div>
+
+
+                        </div>
+
+                        <button id="toggleButton">Toggle Percentage Display</button>
+
+                        <br>
+                        <br>
+
+
+                        <div class="row justify-content-center">
+
                         </div>
 
                     </div>
@@ -145,6 +175,24 @@
                     }
                 });
         </script>
+
+        <script>
+            // パーセンテージの要素を取得
+            const toggleButton = document.getElementById('toggleButton');
+            const quadrantElements = document.querySelectorAll('.quadrant');
+            const percentageElements = document.querySelectorAll('.percentage');
+
+            toggleButton.addEventListener('click', () => {
+                quadrantElements.forEach(quadrant => {
+                    quadrant.classList.toggle('hidden');
+                });
+
+                percentageElements.forEach(percentage => {
+                    percentage.classList.toggle('hidden');
+                });
+            });
+        </script>
+
 
     </x-app-layout>
 </body>

@@ -5,6 +5,9 @@ const shotCountSelect = document.getElementById("shotCountSelect");
 
 const pointsData = []; // ポイントデータを格納する配列
 
+
+
+
 target.addEventListener("click", function(event) {
   if (pointCount >= shotCount || shotCount <= 0) {
     return; 
@@ -18,15 +21,23 @@ target.addEventListener("click", function(event) {
 });
 
 
+
+
 function createPoint(x, y) {
   if (pointCount >= shotCount) {
     return;
   }
 
+  //相対座標の取得のための計算式
+const targetWidth = target.offsetWidth;
+const targetHeight = target.offsetHeight;
+const relativeX = x / targetWidth;
+const relativeY = y / targetHeight;
+
   const point = document.createElement("div");
   point.className = "point";
-  point.style.left = x + "px";
-  point.style.top = y + "px";
+  point.style.left = (relativeX * 100) + "%";
+  point.style.top = (relativeY * 100) + "%";
 
   const pointNumber = document.createElement("span"); // ポイント番号を表示する要素
   pointNumber.className = "pointNumber";
@@ -36,14 +47,14 @@ function createPoint(x, y) {
 
   target.appendChild(point);
 
-    // 一時保存してあるポイントとポイント番号の情報を配列に追加
-    const pointData = { x, y, pointNumber: pointCount ,shotCount: shotCount};
-    pointsData.push(pointData);
+
+  const pointData = { x: relativeX, y: relativeY, pointNumber: pointCount, shotCount: shotCount };
+  pointsData.push(pointData);
 
       
 
    // 一時保存してあるポイントとポイント番号の情報を表示
-   console.log("ポイント:", { x, y });
+   console.log("ポイント:", { relativeX, relativeY });
    console.log("ポイント番号:", pointCount);
    console.log("射撃回数:", shotCount);
 }

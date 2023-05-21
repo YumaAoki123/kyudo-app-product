@@ -49,13 +49,13 @@ class PostController extends Controller
         $totalCount = count($posts);
         $hitCount = 0;
         $missCount = 0;
-
+        //直径がを1にそろえているため0.5を引く。
         foreach ($posts as $post) {
-            $x = $post->pointX - 200;
-            $y = $post->pointY - 200;
+            $x = $post->pointX - 0.5;
+            $y = $post->pointY - 0.5;
 
-            // x^2 + y^2 <= 200^2 の円内にあるかどうかを判定
-            if ($x * $x + $y * $y <= 200 * 200) {
+            //円の公式以内なら的中している。
+            if ($x * $x + $y * $y <= 0.5 * 0.5) {
                 $hitCount++; // 的中したポイントをカウント
             } else {
                 $missCount++; // 外れたポイントをカウント
