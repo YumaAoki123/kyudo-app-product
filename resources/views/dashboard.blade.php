@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script>
         $(function() {
             // カレンダーを表示する
@@ -33,6 +34,8 @@
             });
         });
     </script>
+
+
 </head>
 
 <body>
@@ -51,6 +54,9 @@
                     <p>今週の的中率</p>
                     <br>
                     <br>
+                    <br>
+                    <br>
+                    <br>
                     <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
 
 
@@ -62,11 +68,25 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <!-- 日付を選択するカレンダー -->
-                    <div id="datepicker"></div>
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+
+                            <div class="col-lg-6 col-md-12">
+
+                                <p>新規作成</p>
+                                <!-- 日付を選択するカレンダー -->
+                                <div id="datepicker"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+
 
 
     </x-app-layout>

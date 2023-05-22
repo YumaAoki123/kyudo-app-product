@@ -1,6 +1,11 @@
+
+
 @media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+  }
   .target {
-    margin-top: 30px; 
+    margin: 7vw 0; 
       width: 60vw;
       height: 60vw;
       border-radius: 50%;
@@ -12,12 +17,20 @@
     transform: translate(-50%, -50%);
       justify-content: center;
       align-items: center;
+      
       }
+     .table{
+      display: flex;
+      margin: 10vw 0; 
+     }
     }
 
     @media (min-width: 768px) {
+      .container {
+        flex-direction: row;}
+
       .target {
-        margin-top: 30px; 
+        margin: 2vw 0; 
           width: 30vw;
           height: 30vw;
           border-radius: 50%;
@@ -31,8 +44,10 @@
           align-items: center;
           }
 
-          .table {
+          .table{
             display: flex;
+            margin: 2vw 0; 
+        
           }
         }
       .ring {
@@ -100,14 +115,14 @@
       .point {
           width: 10px;
           height: 10px;
-          background-color: rgb(0, 255, 0);
+          background-color: rgb(0, 255, 64);
           border-radius: 50%;
           position: absolute;
           transform: translate(-50%, -50%);
           display: flex;
           justify-content: center;
           align-items: center;
-          border: 1px solid rgb(139, 64, 224);
+          border: 1px solid rgb(255, 0, 0);
           box-sizing: border-box;
         }
   
@@ -124,7 +139,7 @@
         #quadrant1 {
           top: 0;
           left: 0;
-          background-color: rgb(189, 251, 252);
+          background-color: rgb(169, 156, 156);
         }
         
         #quadrant2 {
