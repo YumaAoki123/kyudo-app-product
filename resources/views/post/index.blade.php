@@ -55,21 +55,30 @@
                     <div class="container">
                         <div class="row justify-content-center">
 
-                            <div class="col-6">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
 
                                     <div class="ring ring-0">
+
                                         <div class="quadrant" id="quadrant1">
-                                            <div class="percentage" id="percentage1">0%</div>
+                                            @if(isset($percentageData))
+                                            <div class="percentage" id="percentage1">{{ round($percentageData['topLeftPercentage'],1) }}%</div>
+                                            @endif
                                         </div>
                                         <div class="quadrant" id="quadrant2">
-                                            <div class="percentage" id="percentage2">0%</div>
+                                            @if(isset($percentageData))
+                                            <div class="percentage" id="percentage2">{{ round($percentageData['topRightPercentage'],1) }}%</div>
+                                            @endif
                                         </div>
                                         <div class="quadrant" id="quadrant3">
-                                            <div class="percentage" id="percentage3">0%</div>
+                                            @if(isset($percentageData))
+                                            <div class="percentage" id="percentage3">{{ round($percentageData['bottomLeftPercentage'],1) }}%</div>
+                                            @endif
                                         </div>
                                         <div class="quadrant" id="quadrant4">
-                                            <div class="percentage" id="percentage4">0%</div>
+                                            @if(isset($percentageData))
+                                            <div class="percentage" id="percentage4">{{ round($percentageData['bottomRightPercentage'],1) }}%</div>
+                                            @endif
                                         </div>
 
                                     </div>
@@ -102,7 +111,7 @@
                             </div>
 
 
-                            <div class="col-6">
+                            <div class="col-lg-6 col-md-12">
 
                                 <table class="table">
                                     <thead>
@@ -142,9 +151,7 @@
                         <br>
 
 
-                        <div class="row justify-content-center">
 
-                        </div>
 
                     </div>
 

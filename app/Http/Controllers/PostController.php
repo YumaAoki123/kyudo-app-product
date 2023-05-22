@@ -49,7 +49,7 @@ class PostController extends Controller
         $totalCount = count($posts);
         $hitCount = 0;
         $missCount = 0;
-        //直径がを1にそろえているため0.5を引く。
+        //直径を1にそろえていて、円の中心を(0,0)とするために0.5引く。
         foreach ($posts as $post) {
             $x = $post->pointX - 0.5;
             $y = $post->pointY - 0.5;
@@ -71,9 +71,38 @@ class PostController extends Controller
             'accuracy' => $accuracy,
         ];
 
+        $topLeftCount = 0;
+        $topRightCount = 0;
+        $bottomLeftCount = 0;
+        $bottomRightCount = 0;
+
+
+        foreach ($posts as $post) {
+            $x = $post->pointX; // データのx座標
+            $y = $post->pointY; // データのy座標
+
+            if ($x <= 0.5 && $y <= 0.5) {
+                $topLeftCount++;
+            } elseif ($x > 0.5 && $y <= 0.5) {
+                $topRightCount++;
+            } elseif ($x <= 0.5 && $y > 0.5) {
+                $bottomLeftCount++;
+            } elseif ($x > 0.5 && $y > 0.5) {
+                $bottomRightCount++;
+            }
+        }
+        $percentageData = [
+            'topLeftPercentage' => ($topLeftCount / $totalCount) * 100,
+            'topRightPercentage' => ($topRightCount / $totalCount) * 100,
+            'bottomLeftPercentage' => ($bottomLeftCount / $totalCount) * 100,
+            'bottomRightPercentage' => ($bottomRightCount / $totalCount) * 100
+        ];
+
+
         return view('post.index', [
             'posts' => $posts,
-            'statisticsData' => $statisticsData
+            'statisticsData' => $statisticsData,
+            'percentageData' => $percentageData
         ]);
     }
 
