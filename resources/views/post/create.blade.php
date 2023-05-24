@@ -19,7 +19,7 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <p>Selected date: {{ $selectedDate }}</p>
+                <p>日付: {{ $selectedDate }}</p>
 
             </h2>
         </x-slot>

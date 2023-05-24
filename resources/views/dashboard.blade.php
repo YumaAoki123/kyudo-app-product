@@ -69,19 +69,19 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-                    <div class="container">
-                        <div class="row justify-content-center">
-
-                            <div class="col-lg-6 col-md-12">
-
-                                <p>新規作成</p>
-                                <!-- 日付を選択するカレンダー -->
-                                <div id="datepicker"></div>
-                            </div>
 
 
-                        </div>
+                    <div class="col-lg-6 col-md-12">
+
+                        <p>新規作成</p>
+                        <!-- 日付を選択するカレンダー -->
+                        <div id="datepicker"></div>
                     </div>
+
+                    <div class="col-lg-6 col-md-12">
+                        <a href="{{ route('post.dataList') }}" class="btn btn-primary btn-custom">データの編集と削除</a>
+                    </div>
+
 
                 </div>
             </div>
