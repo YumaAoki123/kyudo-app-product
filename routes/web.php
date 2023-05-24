@@ -44,4 +44,7 @@ Route::get('/post/result', function () {
 Route::get('/post/index', [PostController::class, 'index'])->name('post.index');
 Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.process');
 
-// Route::post('/getPostData', [PostController::class, 'getPostData']);
+Route::get('/post/dataList', [PostController::class, 'dataList'])->name('post.dataList');
+Route::post('/post/dataList', [PostController::class, 'showDataList'])->name('post.showDataList');
+
+Route::delete('/post/{date_id}', 'App\Http\Controllers\PostController@destroy')->name('post.destroy');

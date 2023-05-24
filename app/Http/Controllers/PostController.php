@@ -21,13 +21,53 @@ class PostController extends Controller
         return view('post.index');
     }
 
+    public function dataList(Request $request)
+    {
+        return view('post.dataList');
+    }
+
+    public function showDataList(Request $request)
+    {
+
+        $posts = []; // $posts変数を初期化
+
+        if ($request->has('from') && $request->has('to')) {
+            $start_date = $request->input('from');
+            $end_date = $request->input('to');
+            $userId = auth()->user()->id;
+
+            $dates = Date::with(['posts' => function ($query) use ($userId, $start_date, $end_date) {
+                $query->whereHas('date', function ($query) use ($userId, $start_date, $end_date) {
+                    $query->where('user_id', $userId)
+                        ->whereBetween('SelectedDate', [$start_date, $end_date]);
+                });
+            }])
+                ->where('user_id', $userId)
+                ->whereBetween('SelectedDate', [$start_date, $end_date])
+                ->orderBy('SelectedDate', 'asc')
+                ->get();
+
+            $dataByDate = [];
+            foreach ($dates as $date) {
+                foreach ($date->posts as $post) {
+                    $dataByDate[$date->SelectedDate][$post->date_id][] = $post;
+                }
+            }
+            return view('post.dataList', [
+                'dataByDate' => $dataByDate,
+            ]);
+        } else {
+            return view('post.dataList', [
+                'dataByDate' => [],
+            ]);
+        }
+    }
+
 
     public function getPostData(Request $request)
     {
         // dd($request->all());
         $posts = []; // $posts変数を初期化
-
-
 
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
@@ -71,6 +111,7 @@ class PostController extends Controller
             'accuracy' => $accuracy,
         ];
 
+        //4象限の的中確率
         $topLeftCount = 0;
         $topRightCount = 0;
         $bottomLeftCount = 0;
@@ -110,11 +151,22 @@ class PostController extends Controller
      * Show the form for creating a new resource.
      */
 
+    public function saveSelectedDate(Request $request)
+    {
+        $selectedDate = $request->input('selectedDate');
+
+        // セッションに日付を保存
+        $request->session()->put('selected_date', $selectedDate);
+
+
+        return response()->json(['success' => true]);
+    }
+
     public function create(Request $request)
     {
         // セッションから日付を取得する
         $selectedDate = $request->session()->get('selected_date');
-
+        $selectedDate = Carbon::createFromFormat('m/d/Y', $selectedDate)->format('Y年m月d日');
         // 日付が存在しない場合は、セッションIDを削除してログアウトする
         if (!$selectedDate) {
             $request->session()->invalidate();
@@ -124,17 +176,6 @@ class PostController extends Controller
         // 日付をビューに渡して表示する
         return view('post.create')->with('selectedDate', $selectedDate);
     }
-
-    public function saveSelectedDate(Request $request)
-    {
-        $selectedDate = $request->input('selectedDate');
-
-        // セッションに日付を保存
-        $request->session()->put('selected_date', $selectedDate);
-
-        return response()->json(['success' => true]);
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -221,8 +262,21 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($dateId)
     {
-        //
+        try {
+            DB::beginTransaction();
+            // 該当のdate_idに紐づくpostsデータを削除
+            Post::where('date_id', $dateId)->delete();
+
+            // 該当のdate_idに紐づくdatesデータを削除
+            Date::where('id', $dateId)->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+
+        // 削除が完了したらリダイレクトなど適切なレスポンスを返す
+        return redirect()->back()->with('success', 'データの削除が完了しました');
     }
 }
