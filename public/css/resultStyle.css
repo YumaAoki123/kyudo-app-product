@@ -31,8 +31,8 @@
 
       .target {
         margin: 2vw 0; 
-          width: 30vw;
-          height: 30vw;
+          width: 20vw;
+          height: 20vw;
           border-radius: 50%;
           background-color: #fff;
           position: relative;
@@ -56,8 +56,8 @@
       }
       
       .ring-0 {
-        width: 120%;
-        height: 120%;
+        width: 140%;
+        height: 140%;
         background-color: #a4eafc;
       }
       .ring-1 {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MyPageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 /*
@@ -18,9 +19,8 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [MyPageController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,16 +30,12 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource('post', PostController::class)->only(['create', 'store'])->names([
-    'create' => 'post.create',
-    'store' => 'post.store',
-]);
+Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
+Route::post('/post', [PostController::class, 'store'])->name('post.store');
 
-Route::post('/saveSelectedDate', 'App\Http\Controllers\PostController@saveSelectedDate')->name('post.saveSelectedDate');
+Route::post('/saveSelectedDate', [PostController::class, 'saveSelectedDate'])->name('post.saveSelectedDate');
 
-Route::get('/post/result', function () {
-    return view('post.result');
-})->name('post.result');
+Route::get('/post/result', [PostController::class, 'result'])->name('post.result');
 
 Route::get('/post/index', [PostController::class, 'index'])->name('post.index');
 Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.process');
@@ -47,4 +43,4 @@ Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.p
 Route::get('/post/dataList', [PostController::class, 'dataList'])->name('post.dataList');
 Route::post('/post/dataList', [PostController::class, 'showDataList'])->name('post.showDataList');
 
-Route::delete('/post/{date_id}', 'App\Http\Controllers\PostController@destroy')->name('post.destroy');
+Route::delete('/post/{date_id}', [PostController::class, 'destroy'])->name('post.destroy');

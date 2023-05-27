@@ -22,6 +22,12 @@
                 <p>日付: {{ $selectedDate }}</p>
 
             </h2>
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+
         </x-slot>
 
         <div class="py-12">
@@ -66,18 +72,17 @@
                                     @csrf
 
                                     <div class="shot-count">
-                                        射撃回数:
+                                        回数:
                                         <select id="shotCountSelect" name="shotCount">
 
                                             <?php
-                                            for ($i = 0; $i <= 10; $i++) {
+                                            for ($i = 0; $i <= 4; $i++) {
                                                 echo "<option value='$i'>$i</option>";
                                             }
                                             ?>
                                         </select>
-
+                                        射
                                         <input type="submit" value="送信" id="submitButton" name="submitButton">
-
 
 
 
