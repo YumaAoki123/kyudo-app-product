@@ -2,8 +2,8 @@
 @media (max-width: 767px) {
 .target {
   margin: 7vw 0; 
-    width: 60vw;
-    height: 60vw;
+    width: 50vw;
+    height: 50vw;
     border-radius: 50%;
     background-color: #fff;
     position: relative;
@@ -19,8 +19,8 @@
   @media (min-width: 768px) {
     .target {
       margin: 2vw 0; 
-        width: 30vw;
-        height: 30vw;
+        width: 20vw;
+        height: 20vw;
         border-radius: 50%;
         background-color: #fff;
         position: relative;
@@ -39,9 +39,9 @@
     }
     
     .ring-0 {
-      width: 120%;
-      height: 120%;
-      background-color: #9fa6b8;
+      width: 170%;
+      height: 170%;
+      background-color: #7097fc;
     }
     .ring-1 {
       width: 100%;

@@ -11,7 +11,7 @@
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -125,7 +125,7 @@
                                         @if(isset($posts) && count($posts) > 0)
 
                                         <tr>
-                                            <td>射撃回数</td>
+                                            <td>射数</td>
                                             <td> {{$statisticsData['totalCount']}} </td>
                                         </tr>
                                         <tr>
@@ -136,16 +136,20 @@
                                             <td>的中率</td>
                                             <td>{{ round($statisticsData['accuracy'],1) }}%</td>
                                         </tr>
+                                        <tr>
+                                            <td>甲矢的中率</td>
+                                            <td>{{ round($statisticsData['firstShotAccuracy'],1) }}%</td>
+                                        </tr>
 
                                         @endif
                                     </tbody>
                                 </table>
                             </div>
 
-
+                            <button id="toggleButton">Toggle Percentage Display</button>
                         </div>
 
-                        <button id="toggleButton">Toggle Percentage Display</button>
+
 
                         <br>
                         <br>
@@ -154,6 +158,48 @@
 
 
                     </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+
+                    <div class="col-lg-6 col-md-12">
+
+                        <table class="table">
+                            <thead>
+
+                                <tr>
+                                    <th>項目</th>
+                                    <th>値</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($posts) && count($posts) > 0)
+                                <tr>
+                                    <td>立ち数</td>
+                                    <td>{{ $countData['totalCount'] }}</td>
+                                </tr>
+                                @foreach ($countData['countLabels'] as $index => $countLabel)
+                                <tr>
+                                    <td>{{ $countLabel }}</td>
+                                    <td>{{ $countData['countResults'][$countLabel] }}</td>
+                                </tr>
+                                @endforeach
+
+
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12">
+                        <canvas id="barChart"></canvas>
+                    </div>>
 
                 </div>
             </div>
@@ -200,7 +246,41 @@
             });
         </script>
 
+        @if(isset($countData))
+        <script>
+            // データの取得
+            const labels = @json($countData['countLabels']);
+            const data = @json(array_values($countData['countResults']));
 
+            // グラフの描画
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Count',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // 棒グラフの背景色
+                        borderColor: 'rgba(54, 162, 235, 1)', // 棒グラフの枠線の色
+                        borderWidth: 1, // 棒グラフの枠線の太さ
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0, // y軸の表示精度（小数点以下の桁数）
+                                stepSize: 1, // y軸の目盛りの間隔
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        @endif
     </x-app-layout>
 </body>
 

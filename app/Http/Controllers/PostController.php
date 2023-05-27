@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Date;
-use Illuminate\Support\Facades\DB; // 追加
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
@@ -26,10 +26,13 @@ class PostController extends Controller
         return view('post.dataList');
     }
 
+    public function result()
+    {
+        return view('post.result');
+    }
+
     public function showDataList(Request $request)
     {
-
-        $posts = []; // $posts変数を初期化
 
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
@@ -53,6 +56,7 @@ class PostController extends Controller
                     $dataByDate[$date->SelectedDate][$post->date_id][] = $post;
                 }
             }
+
             return view('post.dataList', [
                 'dataByDate' => $dataByDate,
             ]);
@@ -104,19 +108,109 @@ class PostController extends Controller
 
         $accuracy = ($totalCount > 0) ? ($hitCount / $totalCount) * 100 : 0;
 
+
+        $firstShotTotalCount = $posts->where('pointNumber', 1)->count();
+        $firstShotHitCount = 0; // pointNumberが1で的中したデータの数
+        $firstShotMissCount = 0;
+
+        $firstShotPosts = $posts->where('pointNumber', 1);
+
+        foreach ($firstShotPosts as $firstShotPost) {
+            $x = $firstShotPost->pointX - 0.5;
+            $y = $firstShotPost->pointY - 0.5;
+            //円の公式以内なら的中している。
+            if ($x * $x + $y * $y <= 0.5 * 0.5) {
+                $firstShotHitCount++; // 的中したポイントをカウント
+            } else {
+                $firstShotMissCount++; // 外れたポイントをカウント
+            }
+        }
+
+        $firstShotAccuracy = ($firstShotTotalCount > 0) ? ($firstShotHitCount / $firstShotTotalCount) * 100 : 0; // 的中率
+
         $statisticsData = [
             'totalCount' => $totalCount,
             'hitCount' => $hitCount,
             'missCount' => $missCount,
             'accuracy' => $accuracy,
+
+            'firstShotTotalCount' => $firstShotTotalCount,
+            'firstShotHitCount' => $firstShotHitCount,
+            'firstShotMissCount' =>  $firstShotMissCount,
+            'firstShotAccuracy' => $firstShotAccuracy
         ];
+
+
+
+        $dateStatistics = [];
+
+        foreach ($posts as $post) {
+            $dateId = $post->date_id;
+
+            if (!isset($dateStatistics[$dateId])) {
+                // 初回のデータなら初期化
+                $dateStatistics[$dateId] = [
+                    'totalShots' => 0,
+                    'totalHits' => 0,
+                ];
+            }
+
+            $dateStatistics[$dateId]['totalShots']++; // 射撃回数をカウント
+
+            $x = $post->pointX - 0.5;
+            $y = $post->pointY - 0.5;
+
+            // 円の公式以内なら的中している。
+            if ($x * $x + $y * $y <= 0.5 * 0.5) {
+                $dateStatistics[$dateId]['totalHits']++; // 的中回数をカウント
+            }
+        }
+
+        $results = [];
+
+        foreach ($dateStatistics as $dateId => $statistics) {
+            $totalShots = $statistics['totalShots'];
+            $totalHits = $statistics['totalHits'];
+
+            $countAccuracy = ($totalShots > 0) ? $totalHits / $totalShots : 0;
+
+            $result = $totalHits . '/' . $totalShots;
+
+            $results[] = [
+                'dateId' => $dateId,
+                'countAccuracy' => $countAccuracy,
+                'result' => $result,
+            ];
+        }
+
+        $countTotalCount = count($results);
+
+
+        $targetAccuracies = ['1', '0.75', '0.5', '0.25', '0'];
+        $countLabels = ['皆中', '三中', '羽分', '一中', '残念'];
+        $countResults = [];
+
+        foreach ($targetAccuracies as $index => $targetAccuracy) {
+            $filteredResults = array_filter($results, function ($countAccuracy) use ($targetAccuracy) {
+                return $countAccuracy['countAccuracy'] == $targetAccuracy;
+            });
+
+            $count = count($filteredResults);
+            $countResults[$countLabels[$index]] = $count;
+        }
+        $countData = [
+            'countResults' => $countResults,
+            'totalCount' => $countTotalCount,
+            'countLabels' => $countLabels,
+        ];
+
+
 
         //4象限の的中確率
         $topLeftCount = 0;
         $topRightCount = 0;
         $bottomLeftCount = 0;
         $bottomRightCount = 0;
-
 
         foreach ($posts as $post) {
             $x = $post->pointX; // データのx座標
@@ -143,7 +237,8 @@ class PostController extends Controller
         return view('post.index', [
             'posts' => $posts,
             'statisticsData' => $statisticsData,
-            'percentageData' => $percentageData
+            'percentageData' => $percentageData,
+            'countData' => $countData
         ]);
     }
 
@@ -209,25 +304,18 @@ class PostController extends Controller
             }
 
             DB::commit();
-
-            // return response()->json(['success' => true]);
-            return redirect()->route('post.result');
+            session()->flash('success', 'データを保存しました。');
+            return response()->json([
+                'redirect_url' => route('post.create')
+            ]);
         } catch (\Exception $e) {
             DB::rollback();
-
             return response()->json(['error' => $e->getMessage()]);
-            // エラーメッセージなどを設定してリダイレクト
-            // return redirect()->back()->with('error', '保存に失敗しました。もう一度お試しください。');
         }
-        // dd('Save complete');
     }
 
 
-    public function showResult(Request $request)
-    {
 
-        return view('post.result');
-    }
 
 
 

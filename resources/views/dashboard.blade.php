@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/dashboardStyle.css') }}">
     <script>
         $(function() {
             // カレンダーを表示する
@@ -18,7 +19,7 @@
                     // セッションに選択された日付を保存する
                     $.ajax({
                         type: "POST",
-                        url: "/kyudo-app-product/public/saveSelectedDate",
+                        url: "{{route('post.saveSelectedDate')}}",
                         dateFormat: 'yy-mm-dd',
                         data: {
                             selectedDate: dateText,
@@ -26,7 +27,7 @@
                         }
                     }).done(function() {
                         // フォームにリダイレクトする
-                        window.location.href = "/kyudo-app-product/public/post/create";
+                        window.location.href = "{{route('post.create')}}";
                     }).fail(function(jqXHR, textStatus, errorThrown) {
                         console.log(textStatus + ": " + errorThrown);
                     });
@@ -52,11 +53,76 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <!-- 今週の的中率を表示するコーナーをここに追加 -->
                     <p>今週の的中率</p>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <div class="container">
+                        <div class="row justify-content-center">
+
+                            <div class="col-lg-6 col-md-12">
+                                <div class="target" id="target">
+                                    <div class="ring ring-1"></div>
+                                    <div class="ring ring-2"></div>
+                                    <div class="ring ring-3"></div>
+                                    <div class="ring ring-4"></div>
+                                    <div class="ring ring-5"></div>
+                                    <div class="ring ring-6"></div>
+
+                                    <!-- 的中したポイントを赤丸で表示 -->
+                                    @if(isset($posts) && count($posts) > 0)
+                                    @foreach ($posts as $post)
+                                    @php
+                                    $x = $post->pointX;
+                                    $y = $post->pointY;
+
+                                    @endphp
+                                    <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
+
+                                    @endforeach
+                                    @endif
+
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-6 col-md-12">
+
+                                <table class="table table-info table-striped">
+
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">項目</th>
+                                            <th scope="col">値</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(isset($posts) && count($posts) > 0)
+                                        <tr>
+
+                                            <td>射数</td>
+                                            <td>{{$statisticsData['totalCount']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>的中回数</td>
+                                            <td>{{ $statisticsData['hitCount'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>的中率</td>
+                                            <td>{{ round($statisticsData['accuracy'],1) }}%</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
                     <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
 
 
@@ -88,8 +154,10 @@
         </div>
 
 
-
+        <script src="{{ asset('js/dashboardScript.js') }}"></script>
     </x-app-layout>
+
+
 
 </body>
 

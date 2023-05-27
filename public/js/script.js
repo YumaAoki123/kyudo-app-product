@@ -60,13 +60,6 @@ const relativeY = y / targetHeight;
 }
 
 
-
-shotCountSelect.addEventListener("change", function() {
-  shotCount = parseInt(shotCountSelect.value);
-  // 射撃回数が変更された場合にターゲットをリセット
-  
-});
-
 function resetTarget() {
   pointCount = 0;
   const points = document.getElementsByClassName("point");
@@ -77,6 +70,14 @@ function resetTarget() {
   pointsData.length = 0;
  
 }
+
+shotCountSelect.addEventListener("change", function() {
+  shotCount = parseInt(shotCountSelect.value);
+  resetTarget(); // 射撃回数が変更された場合にターゲットをリセット
+  
+});
+
+
 
 const clearButton = document.getElementById("clear-button"); // ボタンを取得する
 
@@ -106,8 +107,13 @@ function sendDataToServer() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        console.log("データが正常に送信されました。");
-        // レスポンスを処理する必要がある場合はここで処理する
+        const response = JSON.parse(xhr.responseText);
+            console.log("データが正常に送信されました。");
+
+          
+     // 受け取ったリダイレクト先のURLにリダイレクトする
+     window.location.href = response.redirect_url;
+     
       } else {
         console.log("データの送信に失敗しました。");
         // エラーハンドリングを行う必要がある場合はここで処理する
@@ -128,13 +134,13 @@ submitButton.addEventListener("click", function(event) {
   // ポイントデータをサーバーに送信
   sendDataToServer();
 
-    // 別のページに遷移
-
-    // window.location.href = "/kyudo-app-product/public/result.blade.php";
-
-    // ターゲットと射撃回数をリセット
+ 
+   // ターゲットと射撃回数をリセット
   resetTarget();
-  shotCountSelect.value = "";
+ 
+ 
+
+
 
 });
 
