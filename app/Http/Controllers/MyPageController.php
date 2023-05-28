@@ -17,15 +17,24 @@ class MyPageController extends Controller
         // dd($request->all());
         $posts = []; // $posts変数を初期化
 
-        // 今週の日付範囲を取得
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
+        // // 今週の日付範囲を取得
+        // $startOfWeek = Carbon::now()->startOfWeek();
+        // $endOfWeek = Carbon::now()->endOfWeek();
+
+        // $userId = auth()->user()->id;
+
+        // $posts = Post::whereHas('date', function ($query) use ($startOfWeek, $endOfWeek, $userId) {
+        //     $query->where('user_id', $userId)
+        //         ->whereBetween('selectedDate', [$startOfWeek, $endOfWeek]);
+        // })->get();
+
+        $today = Carbon::today();
 
         $userId = auth()->user()->id;
 
-        $posts = Post::whereHas('date', function ($query) use ($startOfWeek, $endOfWeek, $userId) {
+        $posts = Post::whereHas('date', function ($query) use ($today, $userId) {
             $query->where('user_id', $userId)
-                ->whereBetween('selectedDate', [$startOfWeek, $endOfWeek]);
+                ->whereDate('selectedDate', $today);
         })->get();
 
         // 統計データの表示内容の計算式

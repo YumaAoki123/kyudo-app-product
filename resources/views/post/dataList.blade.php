@@ -47,6 +47,17 @@
 
                 <input type="submit" value="送信">
             </form>
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
         </x-slot>
 
 
@@ -62,7 +73,8 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="container">
+
+                        <div class="container" id="container-{{$dateId}}">
                             <div class="row justify-content-center">
 
                                 <div class="col-lg-6">
@@ -111,17 +123,20 @@
                                 </div>
 
                                 <div class="col-lg-6">
-                                    <form method="post" action="{{route('post.destroy',$dateId)}}">
+                                    <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
+
                                         @csrf
-                                        @method('delete')
-                                        <button onclick="confirmDelete()">削除</button>
-
+                                        @method('DELETE')
+                                        <button type="button" class="delete-button" data-id="{{ $dateId }}">削除</button>
                                     </form>
-
                                 </div>
 
                             </div>
                         </div>
+
+
+
+
 
                     </div>
                 </div>
@@ -137,7 +152,7 @@
 
 
         <!-- jQuery, popper.js, Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
@@ -160,8 +175,39 @@
                     }
                 });
         </script>
+        <script>
+            $(document).ready(function() {
+                $('.delete-button').on('click', function() {
+                    var deleteButton = $(this);
+                    var dataId = deleteButton.data('id');
 
-        <script src="{{ asset('js/dataListScript.js') }}"></script>
+                    if (confirm('本当に削除しますか？')) {
+                        $.ajax({
+                            url: "{{ route('post.destroy', '') }}" + '/' + dataId,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                if (response.status === 'success') {
+
+
+                                    // 削除が成功した場合の処理
+                                    $('#container-' + dataId).remove();
+
+                                } else {
+                                    // エラーが発生した場合の処理
+                                    alert(response.message);
+                                }
+                            },
+
+                        });
+
+
+                    }
+                });
+            });
+        </script>
 
     </x-app-layout>
 </body>

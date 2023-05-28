@@ -35,9 +35,12 @@
             });
         });
     </script>
+    @php
+    $successRate = round($statisticsData['accuracy'],1)
+    @endphp
 
 
-</head>
+
 
 <body>
 
@@ -52,76 +55,90 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <!-- 今週の的中率を表示するコーナーをここに追加 -->
-                    <p>今週の的中率</p>
-                    <div class="container">
-                        <div class="row justify-content-center">
-
-                            <div class="col-lg-6 col-md-12">
-                                <div class="target" id="target">
-                                    <div class="ring ring-1"></div>
-                                    <div class="ring ring-2"></div>
-                                    <div class="ring ring-3"></div>
-                                    <div class="ring ring-4"></div>
-                                    <div class="ring ring-5"></div>
-                                    <div class="ring ring-6"></div>
-
-                                    <!-- 的中したポイントを赤丸で表示 -->
-                                    @if(isset($posts) && count($posts) > 0)
-                                    @foreach ($posts as $post)
-                                    @php
-                                    $x = $post->pointX;
-                                    $y = $post->pointY;
-
-                                    @endphp
-                                    <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
-
-                                    @endforeach
-                                    @endif
+                    <p>本日の的中率</p>
+                    <div class="result-container
+    @if ($successRate < 50)
+        low-success-rate
+    @elseif ($successRate < 80)
+        medium-success-rate
+    @else
+        high-success-rate
+    @endif
+">
+                        <div class="container">
 
 
+                            <div class="row justify-content-center">
 
+                                <div class="col-lg-6 col-md-12">
+
+                                    <div class="target" id="target">
+
+                                        <div class="ring ring-1"></div>
+                                        <div class="ring ring-2"></div>
+                                        <div class="ring ring-3"></div>
+                                        <div class="ring ring-4"></div>
+                                        <div class="ring ring-5"></div>
+                                        <div class="ring ring-6"></div>
+
+                                        <!-- 的中したポイントを赤丸で表示 -->
+                                        @if(isset($posts) && count($posts) > 0)
+                                        @foreach ($posts as $post)
+                                        @php
+                                        $x = $post->pointX;
+                                        $y = $post->pointY;
+
+                                        @endphp
+                                        <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
+
+                                        @endforeach
+                                        @endif
+
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6 col-md-12">
+
+                                    <table class="table">
+
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">項目</th>
+                                                <th scope="col">値</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($posts) && count($posts) > 0)
+                                            <tr>
+
+                                                <td>射数</td>
+                                                <td>{{$statisticsData['totalCount']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>的中回数</td>
+                                                <td>{{ $statisticsData['hitCount'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>的中率</td>
+                                                <td>{{ round($statisticsData['accuracy'],1) }}%</td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
 
 
                                 </div>
-                            </div>
-
-
-                            <div class="col-lg-6 col-md-12">
-
-                                <table class="table table-info table-striped">
-
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">項目</th>
-                                            <th scope="col">値</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(isset($posts) && count($posts) > 0)
-                                        <tr>
-
-                                            <td>射数</td>
-                                            <td>{{$statisticsData['totalCount']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>的中回数</td>
-                                            <td>{{ $statisticsData['hitCount'] }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>的中率</td>
-                                            <td>{{ round($statisticsData['accuracy'],1) }}%</td>
-                                        </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
 
 
                             </div>
 
 
                         </div>
-
-
                     </div>
                     <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
 
@@ -154,7 +171,7 @@
         </div>
 
 
-        <script src="{{ asset('js/dashboardScript.js') }}"></script>
+
     </x-app-layout>
 
 
