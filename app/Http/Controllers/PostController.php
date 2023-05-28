@@ -304,7 +304,7 @@ class PostController extends Controller
             }
 
             DB::commit();
-            session()->flash('success', 'データを保存しました。');
+            session()->flash('success', 'データを保存しました');
             return response()->json([
                 'redirect_url' => route('post.create')
             ]);
@@ -360,11 +360,13 @@ class PostController extends Controller
             // 該当のdate_idに紐づくdatesデータを削除
             Date::where('id', $dateId)->delete();
             DB::commit();
+
+
+            // 削除が成功した場合は成功のレスポンスを返す
+            return response()->json(['status' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => "データの削除に失敗しました"]);
         }
-
-        // 削除が完了したらリダイレクトなど適切なレスポンスを返す
-        return redirect()->back()->with('success', 'データの削除が完了しました');
     }
 }
