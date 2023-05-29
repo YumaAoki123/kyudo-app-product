@@ -30,7 +30,7 @@
         flex-direction: row;}
 
       .target {
-        margin: 2vw 0; 
+        margin: 3vw 0; 
           width: 20vw;
           height: 20vw;
           border-radius: 50%;
@@ -113,16 +113,16 @@
       }
       
       .point {
-          width: 10px;
-          height: 10px;
-          background-color: rgb(0, 255, 64);
+          width: 6px;
+          height: 6px;
+          background-color: rgb(0, 183, 255,0.8);
           border-radius: 50%;
           position: absolute;
           transform: translate(-50%, -50%);
           display: flex;
           justify-content: center;
           align-items: center;
-          border: 1px solid rgb(255, 0, 0);
+          border: 1px solid rgb(111, 0, 255,0.9);
           box-sizing: border-box;
         }
   
@@ -131,7 +131,7 @@
           position: absolute;
           width: 50%;
           height: 50%;
-          opacity: 0.3;
+          background-color: rgba(0, 60, 255, 0.2);
           z-index: 1; /* 4象限の優先度を設定 */
           border: 1px solid #000; /* ボーダーの色を設定 */
         }
@@ -139,40 +139,42 @@
         #quadrant1 {
           top: 0;
           left: 0;
-          background-color: rgb(169, 156, 156);
+        
         }
         
         #quadrant2 {
           top: 0;
           right: 0;
-          background-color:  rgb(169, 156, 156);
+          
         }
         
         #quadrant3 {
           bottom: 0;
           left: 0;
-          background-color: rgb(169, 156, 156);
+      
         }
         
         #quadrant4 {
           bottom: 0;
           right: 0;
-          background-color: rgb(169, 156, 156);
+   
         }
         
         .percentage {
           position: absolute;
-          top: 50%;
+                    top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
           font-size: 16px;
           font-weight: bold;
           pointer-events: none;
           z-index: 2; /* パーセンテージの優先度を設定 */
+       
         }
         
         #percentage1 {
         color: red;
+    
         }
         
         #percentage2 {

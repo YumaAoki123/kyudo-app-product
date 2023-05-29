@@ -126,19 +126,15 @@
 
                                         <tr>
                                             <td>射数</td>
-                                            <td> {{$statisticsData['totalCount']}} </td>
+                                            <td> {{$statisticsData['totalCount']}} 射 </td>
                                         </tr>
                                         <tr>
-                                            <td>的中回数</td>
-                                            <td> {{ $statisticsData['hitCount'] }} </td>
+                                            <td>的中数</td>
+                                            <td> {{ $statisticsData['hitCount'] }} 回</td>
                                         </tr>
                                         <tr>
                                             <td>的中率</td>
-                                            <td>{{ round($statisticsData['accuracy'],1) }}%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>甲矢的中率</td>
-                                            <td>{{ round($statisticsData['firstShotAccuracy'],1) }}%</td>
+                                            <td>{{ round($statisticsData['accuracy'],1) }} %</td>
                                         </tr>
 
                                         @endif
@@ -182,12 +178,12 @@
                                 @if(isset($posts) && count($posts) > 0)
                                 <tr>
                                     <td>立ち数</td>
-                                    <td>{{ $countData['totalCount'] }}</td>
+                                    <td>{{ $countData['totalCount'] }} 回</td>
                                 </tr>
                                 @foreach ($countData['countLabels'] as $index => $countLabel)
                                 <tr>
                                     <td>{{ $countLabel }}</td>
-                                    <td>{{ $countData['countResults'][$countLabel] }}</td>
+                                    <td>{{ $countData['countResults'][$countLabel] }} 回</td>
                                 </tr>
                                 @endforeach
 
@@ -199,7 +195,33 @@
 
                     <div class="col-lg-6 col-md-12">
                         <canvas id="barChart"></canvas>
-                    </div>>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12">
+
+                        <table class="table">
+                            <thead>
+
+                                <tr>
+                                    <th>項目</th>
+                                    <th>値</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($statisticsData))
+                                @foreach ($statisticsData['firstShotLabels'] as $index => $firstShotLabel)
+                                <tr>
+                                    <td>{{ $firstShotLabel }}</td>
+                                    <td>{{ round($statisticsData['firstShotAccuracies'][$index +1],1) }} %</td>
+                                </tr>
+                                @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <canvas id="anotherChart"></canvas>
+                    </div>
 
                 </div>
             </div>
@@ -259,7 +281,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Count',
+                        label: '回数',
                         data: data,
                         backgroundColor: 'rgba(54, 162, 235, 0.5)', // 棒グラフの背景色
                         borderColor: 'rgba(54, 162, 235, 1)', // 棒グラフの枠線の色
@@ -273,7 +295,7 @@
                             beginAtZero: true,
                             ticks: {
                                 precision: 0, // y軸の表示精度（小数点以下の桁数）
-                                stepSize: 1, // y軸の目盛りの間隔
+                                stepSize: 0, // y軸の目盛りの間隔
                             }
                         }
                     }
@@ -281,6 +303,41 @@
             });
         </script>
         @endif
+
+        @if(isset($statisticsData))
+        <script>
+            const labels2 = @json($statisticsData['firstShotLabels']);
+            const data2 = @json(array_values($statisticsData['firstShotAccuracies']));
+            const ctx2 = document.getElementById('anotherChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: labels2,
+                    datasets: [{
+                        label: '的中率',
+                        data: data2,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 0,
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        @endif
+
+
     </x-app-layout>
 </body>
 

@@ -109,35 +109,48 @@ class PostController extends Controller
         $accuracy = ($totalCount > 0) ? ($hitCount / $totalCount) * 100 : 0;
 
 
-        $firstShotTotalCount = $posts->where('pointNumber', 1)->count();
-        $firstShotHitCount = 0; // pointNumberが1で的中したデータの数
-        $firstShotMissCount = 0;
+        $firstShotTotalCounts = [];
+        $firstShotHitCounts = [];
+        $firstShotMissCounts = [];
+        $firstShotLabels = ['一射目', '二射目', '三射目', '四射目'];
 
-        $firstShotPosts = $posts->where('pointNumber', 1);
+        for ($i = 1; $i <= 4; $i++) {
+            $shotTotalCounts = $posts->where('pointNumber', $i)->count();
+            $shotHitCount = 0;
+            $shotMissCount = 0;
+            $firstShotPosts = $posts->where('pointNumber', $i);
 
-        foreach ($firstShotPosts as $firstShotPost) {
-            $x = $firstShotPost->pointX - 0.5;
-            $y = $firstShotPost->pointY - 0.5;
-            //円の公式以内なら的中している。
-            if ($x * $x + $y * $y <= 0.5 * 0.5) {
-                $firstShotHitCount++; // 的中したポイントをカウント
-            } else {
-                $firstShotMissCount++; // 外れたポイントをカウント
+            foreach ($firstShotPosts as $firstShotPost) {
+                $x = $firstShotPost->pointX - 0.5;
+                $y = $firstShotPost->pointY - 0.5;
+                //円の公式以内なら的中している。
+                if ($x * $x + $y * $y <= 0.5 * 0.5) {
+                    $shotHitCount++; // 的中したポイントをカウント
+                } else {
+                    $shotMissCount++; // 外れたポイントをカウント
+                }
             }
+
+            $firstShotTotalCounts[$i] = $shotTotalCounts;
+            $firstShotHitCounts[$i] =  $shotHitCount;
+            $firstShotMissCounts[$i] = $shotMissCount;
         }
 
-        $firstShotAccuracy = ($firstShotTotalCount > 0) ? ($firstShotHitCount / $firstShotTotalCount) * 100 : 0; // 的中率
-
+        $firstShotAccuracies = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $firstShotAccuracies[$i] = ($firstShotTotalCounts[$i] > 0) ? ($firstShotHitCounts[$i] / $firstShotTotalCounts[$i]) * 100 : 0; // 的中率
+        }
         $statisticsData = [
             'totalCount' => $totalCount,
             'hitCount' => $hitCount,
             'missCount' => $missCount,
             'accuracy' => $accuracy,
 
-            'firstShotTotalCount' => $firstShotTotalCount,
-            'firstShotHitCount' => $firstShotHitCount,
-            'firstShotMissCount' =>  $firstShotMissCount,
-            'firstShotAccuracy' => $firstShotAccuracy
+            'firstShotTotalCounts' => $firstShotTotalCounts,
+            'firstShotHitCounts' => $firstShotHitCounts,
+            'firstShotMissCounts' =>  $firstShotMissCounts,
+            'firstShotAccuracies' => $firstShotAccuracies,
+            'firstShotLabels' => $firstShotLabels
         ];
 
 
