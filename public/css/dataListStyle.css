@@ -2,9 +2,10 @@
 
 @media (max-width: 767px) {
   .container {
-    flex-direction: column;}
+    padding: 10vw;
+    flex-direction: row;}
     .target {
-      margin: 7vw 0; 
+    
         width: 15vw;
         height: 15vw;
         border-radius: 50%;
@@ -19,7 +20,7 @@
         
         }
         .table{
-          margin: 1vw 0; 
+          margin-top: 10vw; 
         display: flex;
                 }
        
@@ -27,10 +28,13 @@
   
       @media (min-width: 768px) {
         .container {
+          padding-top: 1vw;
+          padding-bottom: 2vw;
           flex-direction: row;}
   
         .target {
-          margin: 1vw 0; 
+          margin-top: 2vw;
+        
             width: 7vw;
             height: 7vw;
             border-radius: 50%;
@@ -127,62 +131,44 @@
           }
     
           
-          .quadrant {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            opacity: 0.3;
-            z-index: 1; /* 4象限の優先度を設定 */
-            border: 1px solid #000; /* ボーダーの色を設定 */
+                    button.delete-button {
+            color: #000000;
+                      border-bottom: 5px solid #bd0000;
+         
           }
-          
-          #quadrant1 {
-            top: 0;
-            left: 0;
-            background-color: rgb(169, 156, 156);
+          button.delete-button:hover {
+            margin-top: 3px;
+            color: #fff;
+            background: #eb0000;
+            border-bottom: 2px solid #bd0000;
+            
           }
-          
-          #quadrant2 {
-            top: 0;
-            right: 0;
-            background-color:  rgb(169, 156, 156);
+          button.btn--shadow {
+            -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+            
           }
-          
-          #quadrant3 {
-            bottom: 0;
-            left: 0;
-            background-color: rgb(169, 156, 156);
-          }
-          
-          #quadrant4 {
-            bottom: 0;
-            right: 0;
-            background-color: rgb(169, 156, 156);
-          }
-          
-          .percentage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 16px;
+
+          .heading-normal{
+            font-size: 125%;
             font-weight: bold;
-            pointer-events: none;
-            z-index: 2; /* パーセンテージの優先度を設定 */
+            line-height: 170%;
+            color:  #e2750f;
+            border-bottom: 2px solid #e2750f;
+            margin: 20px 0 15px;
           }
+
+          button.submit-button {
+         
+            margin-top: 3px;
+            color: #fff;
+            background-color: #51a351;
+            border-bottom: 2px solid #326e32;
+        }   
+        button.submit-button:hover {
+          margin-top: 3px;
+          color: #fff;
+          background: #51a351;
+          border-bottom: 2px solid #326e32;
           
-          #percentage1 {
-          color: red;
-          }
-          
-          #percentage2 {
-            color: red;
-          }
-          
-          #percentage3 {
-            color: red;
-          }
-          
-          #percentage4 {
-            color: red;
-          }
+        }

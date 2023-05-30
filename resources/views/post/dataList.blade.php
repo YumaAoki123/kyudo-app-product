@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>統計情報</title>
+    <title>弓道管理Pro</title>
 
     <link rel="stylesheet" href="{{ asset('css/dataListStyle.css') }}">
 
@@ -25,39 +25,29 @@
         <x-slot name="header">
             <form method="POST" action="{{ route('post.showDataList') }}">
                 @csrf
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6">
 
-                            <div class="input-daterange input-group" id="datepicker">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">開始日付</span>
-                                </div>
-                                <input type="text" class="input-sm form-control" name="from" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text">終了日付</span>
-                                </div>
-                                <input type="text" class="input-sm form-control" name="to" />
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+
+                        <div class="input-daterange input-group" id="datepicker">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">開始日付</span>
                             </div>
-
+                            <input type="text" class="input-sm form-control" name="from" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">終了日付</span>
+                            </div>
+                            <input type="text" class="input-sm form-control" name="to" />
                         </div>
-                    </div>
 
+                    </div>
                 </div>
 
-                <input type="submit" value="送信">
-            </form>
-            @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
 
-            @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
+                <button type="submit" class="submit-button">決定</button>
+
+            </form>
+
         </x-slot>
 
 
@@ -65,84 +55,85 @@
 
         @if(isset($dataByDate))
         @foreach ($dataByDate as $date => $dateData)
-        <h3>{{ $date }}</h3>
+
+        <h2 class="heading-normal">{{ $date }}</h2>
+
         @foreach ($dateData as $dateId => $posts)
 
 
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-                        <div class="container" id="container-{{$dateId}}">
-                            <div class="row justify-content-center">
+                <div class="container" id="container-{{$dateId}}">
+                    <div class="row justify-content-center">
 
-                                <div class="col-lg-6">
-                                    <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
-                                        <div class="ring ring-0"></div>
-                                        <div class="ring ring-1"></div>
-                                        <div class="ring ring-2"></div>
-                                        <div class="ring ring-3"></div>
-                                        <div class="ring ring-4"></div>
-                                        <div class="ring ring-5"></div>
-                                        <div class="ring ring-6"></div>
-                                        <!-- 的中したポイントを赤丸で表示 -->
-                                        @foreach ($posts as $post)
-                                        @php
-                                        $x = $post->pointX;
-                                        $y = $post->pointY;
-                                        @endphp
-                                        <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 ">
-                                    <table class="table">
-                                        <tr>
-                                            @for ($i = 1; $i <= 4; $i++)<th value='$i'>{{$i}}</th>@endfor
-                                        </tr>
-
-                                        <tr>
-                                        <tr>
-                                            @foreach ($posts as $post)
-                                            <td>
-
-                                                @php
-                                                $x = $post->pointX - 0.5;
-                                                $y = $post->pointY - 0.5;
-                                                $isHit = ($x * $x + $y * $y <= 0.5 * 0.5); @endphp @if ($isHit) 〇 @else × @endif </td>
-
-                                                    @endforeach
-
-                                        </tr>
-
-                                    </table>
-
-
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
-
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="delete-button" data-id="{{ $dateId }}">削除</button>
-                                    </form>
-                                </div>
-
+                        <div class="col-lg-6">
+                            <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
+                                <div class="ring ring-0"></div>
+                                <div class="ring ring-1"></div>
+                                <div class="ring ring-2"></div>
+                                <div class="ring ring-3"></div>
+                                <div class="ring ring-4"></div>
+                                <div class="ring ring-5"></div>
+                                <div class="ring ring-6"></div>
+                                <!-- 的中したポイントを赤丸で表示 -->
+                                @foreach ($posts as $post)
+                                @php
+                                $x = $post->pointX;
+                                $y = $post->pointY;
+                                @endphp
+                                <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
+                                @endforeach
                             </div>
                         </div>
 
+                        <div class="col-lg-6 ">
+                            <table class="table">
+                                <tr>
+                                    @for ($i = 1; $i <= 4; $i++)<th value='$i'>{{$i}}</th>@endfor
+                                </tr>
+
+                                <tr>
+                                <tr>
+                                    @foreach ($posts as $post)
+                                    <td>
+
+                                        @php
+                                        $x = $post->pointX - 0.5;
+                                        $y = $post->pointY - 0.5;
+                                        $isHit = ($x * $x + $y * $y <= 0.5 * 0.5); @endphp @if ($isHit) &#9675; @else &#10005; @endif </td>
+
+                                            @endforeach
+
+                                </tr>
+
+                            </table>
 
 
+                        </div>
 
+                        <div class="col-lg-6">
+                            <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
 
+                                @csrf
+                                @method('DELETE')
+
+                            </form>
+                        </div>
+                        <button type="button" class="delete-button" data-id="{{ $dateId }}">削除</button>
                     </div>
                 </div>
 
+
+
+
+
             </div>
         </div>
+
+
 
         @endforeach
         @endforeach

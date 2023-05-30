@@ -7,7 +7,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Archery Target</title>
+    <title>弓道管理Pro</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -33,10 +33,12 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-
+                    <h1 class="heading-normal">
+                        的中データ入力
+                    </h1>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-6">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="target" id="target">
                                     <div class="ring ring-0"></div>
                                     <div class="ring ring-1"></div>
@@ -49,24 +51,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-6">
 
-                                    <button id="clear-button">Clear</button>
 
-                                </div>
-                            </div>
-                        </div>
+
+
 
                         <br>
                         <br>
                         <br>
-
 
 
                         <div class="row justify-content-center">
-                            <div class="col-6">
+                            <div class="col-lg-6 col-md-12" style="display:flex;">
                                 <form action="{{ route('post.store') }}" method="POST">
 
                                     @csrf
@@ -82,13 +78,17 @@
                                             ?>
                                         </select>
                                         射
-                                        <input type="submit" value="送信" id="submitButton" name="submitButton">
+
+
+
 
 
 
 
                                     </div>
                                 </form>
+                                <button id="clear-button" class="btn btn-clear btn--cubic btn--shadow">クリア</button>
+                                <button type="submit" id="submitButton" name="submitButton" class="btn btn-submit btn--cubic btn--shadow"> 決定 </button>
                             </div>
                         </div>
 
