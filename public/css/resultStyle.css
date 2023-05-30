@@ -2,10 +2,11 @@
 
 @media (max-width: 767px) {
   .container {
+    padding-top: 20vw;
     flex-direction: column;
   }
   .target {
-    margin: 7vw 0; 
+ 
       width: 50vw;
       height: 50vw;
       border-radius: 50%;
@@ -20,17 +21,19 @@
       
       }
      .table{
+      margin-top: 25vw;
       display: flex;
-      margin: 10vw 0; 
-     }
-    }
+       }
+        }
 
     @media (min-width: 768px) {
       .container {
+padding-top: 8vw;
+padding-bottom: 8vw;
         flex-direction: row;}
 
       .target {
-        margin: 3vw 0; 
+    
           width: 20vw;
           height: 20vw;
           border-radius: 50%;
@@ -45,8 +48,9 @@
           }
 
           .table{
+       
             display: flex;
-            margin: 2vw 0; 
+           
         
           }
         }
@@ -188,3 +192,42 @@
         #percentage4 {
           color: red;
         }
+
+        .heading-normal {
+          font-size: 125%;
+          font-weight: bold;
+          line-height: 170%;
+          border-bottom: 2px solid #e2750f;
+          margin: 20px 0 15px;
+      }
+
+      .heading-small {
+        margin-top: 10px;
+        font-size: 115%;
+        font-weight: bold;
+        line-height: 130%;
+        border-left: 5px solid #e2750f;
+        padding-left: 7px;
+        
+    }
+
+    button.submit-button {
+         
+      margin-top: 3px;
+      color: #fff;
+      background-color: #51a351;
+      border-bottom: 2px solid #326e32;
+  }   
+  button.submit-button:hover {
+    margin-top: 3px;
+    color: #fff;
+    background: #51a351;
+    border-bottom: 2px solid #326e32;
+    
+  }
+
+    button.btn--shadow {
+      -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+      
+    }

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>弓道管理Pro</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -35,12 +35,8 @@
             });
         });
     </script>
-    @php
-    $successRate = round($statisticsData['accuracy'],1)
-    @endphp
 
-
-
+</head>
 
 <body>
 
@@ -50,127 +46,127 @@
                 マイページ
             </h2>
         </x-slot>
+        @php
+        $successRate = round($statisticsData['accuracy'],1)
+        @endphp
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <!-- 今週の的中率を表示するコーナーをここに追加 -->
-                    <p>本日の的中率</p>
-                    <div class="result-container
-    @if ($successRate < 50)
-        low-success-rate
-    @elseif ($successRate < 80)
-        medium-success-rate
-    @else
-        high-success-rate
-    @endif
-">
-                        <div class="container">
+
+                    <section>
+                        <h1 class="heading-normal">
+                            本日の的中率
+                        </h1>
+                        <div class="{{
+    ($successRate < 50) ? 'low-success-rate' : 
+    (($successRate < 80) ? 'medium-success-rate' : 'high-success-rate')
+}}">
+                            <div class="container">
 
 
-                            <div class="row justify-content-center">
+                                <div class="row justify-content-center">
 
-                                <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12">
 
-                                    <div class="target" id="target">
+                                        <div class="target" id="target">
 
-                                        <div class="ring ring-1"></div>
-                                        <div class="ring ring-2"></div>
-                                        <div class="ring ring-3"></div>
-                                        <div class="ring ring-4"></div>
-                                        <div class="ring ring-5"></div>
-                                        <div class="ring ring-6"></div>
+                                            <div class="ring ring-1"></div>
+                                            <div class="ring ring-2"></div>
+                                            <div class="ring ring-3"></div>
+                                            <div class="ring ring-4"></div>
+                                            <div class="ring ring-5"></div>
+                                            <div class="ring ring-6"></div>
 
-                                        <!-- 的中したポイントを赤丸で表示 -->
-                                        @if(isset($posts) && count($posts) > 0)
-                                        @foreach ($posts as $post)
-                                        @php
-                                        $x = $post->pointX;
-                                        $y = $post->pointY;
+                                            <!-- 的中したポイントを赤丸で表示 -->
+                                            @if(isset($posts) && count($posts) > 0)
+                                            @foreach ($posts as $post)
+                                            @php
+                                            $x = $post->pointX;
+                                            $y = $post->pointY;
 
-                                        @endphp
-                                        <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
+                                            @endphp
+                                            <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
 
-                                        @endforeach
-                                        @endif
+                                            @endforeach
+                                            @endif
 
 
 
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-6 col-md-12">
+
+                                        <table class="table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">項目</th>
+                                                    <th scope="col">値</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if(isset($posts) && count($posts) > 0)
+                                                <tr>
+
+                                                    <td>射数</td>
+                                                    <td>{{$statisticsData['totalCount']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>的中回数</td>
+                                                    <td>{{ $statisticsData['hitCount'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>的中率</td>
+                                                    <td>{{ round($statisticsData['accuracy'],1) }}%</td>
+                                                </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
 
 
                                     </div>
-                                </div>
-
-
-                                <div class="col-lg-6 col-md-12">
-
-                                    <table class="table">
-
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">項目</th>
-                                                <th scope="col">値</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if(isset($posts) && count($posts) > 0)
-                                            <tr>
-
-                                                <td>射数</td>
-                                                <td>{{$statisticsData['totalCount']}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>的中回数</td>
-                                                <td>{{ $statisticsData['hitCount'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>的中率</td>
-                                                <td>{{ round($statisticsData['accuracy'],1) }}%</td>
-                                            </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
 
 
                                 </div>
 
 
                             </div>
-
-
                         </div>
-                    </div>
-                    <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
 
+                    </section>
+
+
+
+                    <h1 class="heading-normal">
+                        新規作成
+                    </h1>
+                    <div class="container">
+
+                        <section>
+
+                            <div class="col-lg-6 col-md-12">
+
+                                <div id="datepicker"></div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-12">
+                                <a href="{{ route('post.dataList') }}" class="btn btn-primary btn-custom">データの編集と削除</a>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
+                            </div>
+
+                    </div>
+                    </section>
 
                 </div>
-
             </div>
         </div>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-
-
-
-                    <div class="col-lg-6 col-md-12">
-
-                        <p>新規作成</p>
-                        <!-- 日付を選択するカレンダー -->
-                        <div id="datepicker"></div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-12">
-                        <a href="{{ route('post.dataList') }}" class="btn btn-primary btn-custom">データの編集と削除</a>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-
-
 
     </x-app-layout>
 

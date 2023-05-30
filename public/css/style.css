@@ -1,7 +1,7 @@
 
 @media (max-width: 767px) {
 .target {
-  margin: 7vw 0; 
+  margin: 10vw 0; 
     width: 50vw;
     height: 50vw;
     border-radius: 50%;
@@ -18,12 +18,11 @@
 
   @media (min-width: 768px) {
     .target {
-      margin: 2vw 0; 
+      margin: 4vw 0; 
         width: 20vw;
         height: 20vw;
         border-radius: 50%;
-        background-color: #fff;
-        position: relative;
+         position: relative;
         display: flex;
         top: 50%;
         left: 50%;
@@ -41,7 +40,7 @@
     .ring-0 {
       width: 170%;
       height: 170%;
-      background-color: #7097fc;
+      background-color: rgb(228, 250, 249);
     }
     .ring-1 {
       width: 100%;
@@ -122,4 +121,44 @@
       text-align: left;
     }
   
-  
+    button.btn-submit {
+      color: #fff;
+      background-color: #eb0089;
+      border-bottom: 5px solid #a80062;
+   
+    }
+    button.btn-submit:hover {
+      margin-top: 3px;
+      color: #fff;
+      background: #eb0089;
+      border-bottom: 2px solid #a80062;
+      
+    }
+    button.btn--shadow {
+      -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+      
+    }
+
+
+    button.btn-clear {
+      color: black;
+      background-color: #62ffd8;
+      border-bottom: 5px solid #00c291;
+   
+    }
+    button.btn-clear:hover {
+      margin-top: 3px;
+      color: black;
+      background: #62ffd8;
+      border-bottom: 2px solid #00c291;
+      
+    }
+
+    .heading-normal {
+      font-size: 125%;
+      font-weight: bold;
+      line-height: 170%;
+      border-bottom: 2px solid #e2750f;
+      margin: 20px 0 15px;
+  }
