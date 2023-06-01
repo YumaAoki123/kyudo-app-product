@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Date;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -34,6 +34,7 @@ class PostController extends Controller
     public function showDataList(Request $request)
     {
 
+
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
             $end_date = $request->input('to');
@@ -57,6 +58,12 @@ class PostController extends Controller
                 }
             }
 
+            if ($dates->isEmpty()) {
+                // データが空の場合の処理
+                session()->flash('false', 'データが空です');
+                return redirect()->route('post.dataList');
+            }
+
             return view('post.dataList', [
                 'dataByDate' => $dataByDate,
             ]);
@@ -70,8 +77,6 @@ class PostController extends Controller
 
     public function getPostData(Request $request)
     {
-        // dd($request->all());
-        $posts = []; // $posts変数を初期化
 
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
@@ -88,6 +93,11 @@ class PostController extends Controller
             $posts = []; // データが存在しない場合に空の配列として初期化
         }
 
+        if ($posts->isEmpty()) {
+            // データが空の場合の処理
+            session()->flash('false', 'データが空です');
+            return redirect()->route('post.index');
+        }
 
         // 統計データの表示内容の計算式
         $totalCount = count($posts);
@@ -292,13 +302,52 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $selectedDate = $request->session()->get('selected_date');
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData, true);
 
+        if (empty($data)) {
+            // データが空の場合の処理
+
+            session()->flash('false', 'データが空です');
+            return response()->json([
+                'redirect_url' => route('post.create')
+            ]);
+        }
+
+        $rules = [
+            'shotCount' => 'required',
+            'pointNumber' => 'required',
+            'x' => 'required',
+            'y' => 'required',
+        ];
+
+        $errors = [];
+
+        foreach ($data as $item) {
+            $validator = Validator::make($item, $rules);
+            if ($validator->fails()) {
+                $errors[] = $validator->errors();
+            } else {
+                if (count($data) !== $item['shotCount']) {
+                    $errors[] = [
+                        'shotCount' => ['point numberの個数とshot countの数が一致しません。'],
+                    ];
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            // バリデーションエラーが発生した場合の処理
+            session()->flash('false', '正しいデータを入力してください');
+            return response()->json([
+                'redirect_url' => route('post.create')
+            ]);
+        }
+
+
+        $selectedDate = $request->session()->get('selected_date');
         try {
             DB::beginTransaction();
-
-            $jsonData = $request->getContent();
-            $data = json_decode($jsonData, true);
 
             $user = User::find(auth()->id());
             $date = new Date();
@@ -365,6 +414,7 @@ class PostController extends Controller
      */
     public function destroy($dateId)
     {
+
         try {
             DB::beginTransaction();
             // 該当のdate_idに紐づくpostsデータを削除

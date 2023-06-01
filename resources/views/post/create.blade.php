@@ -28,6 +28,12 @@
             </div>
             @endif
 
+            @if(session('false'))
+            <div class="alert alert-danger">
+                {{ session('false') }}
+            </div>
+            @endif
+
         </x-slot>
 
         <div class="py-12">
@@ -78,12 +84,6 @@
                                             ?>
                                         </select>
                                         射
-
-
-
-
-
-
 
                                     </div>
                                 </form>

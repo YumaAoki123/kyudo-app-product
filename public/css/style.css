@@ -123,15 +123,17 @@
   
     button.btn-submit {
       color: #fff;
-      background-color: #eb0089;
-      border-bottom: 5px solid #a80062;
+      font-weight: bold;
+           background-color: #e2750f;
+      border-bottom: 5px solid #b15601;
    
     }
     button.btn-submit:hover {
       margin-top: 3px;
-      color: #fff;
-      background: #eb0089;
-      border-bottom: 2px solid #a80062;
+      color: black;
+      font-weight: bold;
+      background: #e2750f;
+      border-bottom: 2px solid #b15601;
       
     }
     button.btn--shadow {
@@ -142,16 +144,18 @@
 
 
     button.btn-clear {
-      color: black;
-      background-color: #62ffd8;
-      border-bottom: 5px solid #00c291;
+      color: white;
+      font-weight: bold;
+      background-color: #51a351;
+      border-bottom: 5px solid #326e32;
    
     }
     button.btn-clear:hover {
       margin-top: 3px;
-      color: black;
-      background: #62ffd8;
-      border-bottom: 2px solid #00c291;
+            color: black;
+            font-weight: bold;
+      background: #51a351;
+      border-bottom: 2px solid #326e32;
       
     }
 

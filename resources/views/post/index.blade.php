@@ -43,15 +43,19 @@
                             <input type="text" class="input-sm form-control" name="to" />
                         </div>
                     </div>
-                    <button type="submit" class="submit-button">決定</button>
+
                 </div>
 
-
+                <button type="submit" class="submit-button">決定</button>
 
 
 
             </form>
-
+            @if(session('false'))
+            <div class="alert alert-danger">
+                {{ session('false') }}
+            </div>
+            @endif
         </x-slot>
 
 
@@ -125,7 +129,7 @@
 
 
                                 <div class="col-lg-6 col-md-12">
-
+                                    @if(isset($posts) && count($posts) > 0)
                                     <table class="table">
                                         <thead>
 
@@ -135,7 +139,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(isset($posts) && count($posts) > 0)
+
 
                                             <tr>
                                                 <td>射数</td>
@@ -161,7 +165,7 @@
                         </div>
                     </section>
 
-
+                    @if(isset($statisticsData))
                     <section>
 
 
@@ -181,7 +185,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-12">
 
-                                        <table class="table">
+                                        <table class="table table-striped">
                                             <thead>
 
                                                 <tr>
@@ -190,14 +194,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if(isset($statisticsData))
+
                                                 @foreach ($statisticsData['firstShotLabels'] as $index => $firstShotLabel)
                                                 <tr>
                                                     <td>{{ $firstShotLabel }}</td>
                                                     <td>{{ round($statisticsData['firstShotAccuracies'][$index +1],1) }} %</td>
                                                 </tr>
                                                 @endforeach
-                                                @endif
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -205,20 +209,23 @@
                             </div>
                         </section>
 
+
                         <section>
                             <h2 class="heading-small">
                                 四射的中成績
                             </h2>
                             <div class="container2">
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-6 col-md-12">
-                                        <canvas id="barChart"></canvas>
-                                    </div>
-
 
                                     <div class="col-lg-6 col-md-12">
+                                        <diV class="pie-chart">
+                                            <canvas id="pieChart"> </canvas>
+                                        </div>
+                                    </diV>
 
-                                        <table class="table">
+                                    <div class="col-lg-6 col-md-12">
+
+                                        <table class="table table-striped">
                                             <thead>
 
                                                 <tr>
@@ -227,7 +234,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if(isset($posts) && count($posts) > 0)
+
                                                 <tr>
                                                     <td>立ち数</td>
                                                     <td>{{ $countData['totalCount'] }} 回</td>
@@ -240,7 +247,7 @@
                                                 @endforeach
 
 
-                                                @endif
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -249,6 +256,7 @@
                         </section>
 
                     </section>
+                    @endif
 
                 </div>
             </div>
@@ -289,32 +297,58 @@
             // データの取得
             const labels = @json($countData['countLabels']);
             const data = @json(array_values($countData['countResults']));
+            const total = data.reduce((a, b) => a + b, 0); // 総数を計算
+
 
             // グラフの描画
-            const ctx = document.getElementById('barChart').getContext('2d');
+            const ctx = document.getElementById('pieChart').getContext('2d');
             new Chart(ctx, {
-                type: 'bar',
+                type: 'pie',
                 data: {
                     labels: labels,
                     datasets: [{
                         label: '回数',
                         data: data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // 棒グラフの背景色
-                        borderColor: 'rgba(54, 162, 235, 1)', // 棒グラフの枠線の色
-                        borderWidth: 1, // 棒グラフの枠線の太さ
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(255, 205, 86, 0.5)',
+                            // 他の色を追加で指定することも可能
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            // 他の色を追加で指定することも可能
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
                     }]
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0, // y軸の表示精度（小数点以下の桁数）
-                                stepSize: 0, // y軸の目盛りの間隔
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / data.reduce((a, b) => a + b, 0)) * 100);
+                                    return `${label}: ${percentage}%`;
+                                }
                             }
                         }
+
                     },
+
                     animation: true,
                 }
             });
