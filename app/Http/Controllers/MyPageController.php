@@ -37,6 +37,8 @@ class MyPageController extends Controller
                 ->whereDate('selectedDate', $today);
         })->get();
 
+
+
         // 統計データの表示内容の計算式
         $totalCount = count($posts);
         $hitCount = 0;
@@ -63,9 +65,17 @@ class MyPageController extends Controller
             'accuracy' => $accuracy,
         ];
 
+
+
+
+
+
+
+
         return view('dashboard', [
             'posts' => $posts,
             'statisticsData' => $statisticsData,
+
         ]);
     }
 }

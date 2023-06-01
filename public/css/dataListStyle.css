@@ -3,7 +3,10 @@
 @media (max-width: 767px) {
   .container {
     padding: 10vw;
-    flex-direction: row;}
+    flex-direction: row;
+ 
+  }
+   
     .target {
     
         width: 15vw;
@@ -21,7 +24,7 @@
         }
         .table{
           margin-top: 10vw; 
-        display: flex;
+                  display: flex;
                 }
        
       }

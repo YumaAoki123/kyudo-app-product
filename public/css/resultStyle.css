@@ -20,10 +20,26 @@
       align-items: center;
       
       }
+      table.table-striped{
+        margin-top: 1vw;
+
+      }
      .table{
       margin-top: 25vw;
       display: flex;
        }
+
+       .pie-chart{
+        width: 85vw;
+        height: 85vw;
+        display:flex;
+      
+      }
+
+      .chart-legend {
+        text-align: center;
+        margin-top: 10px;
+      }
         }
 
     @media (min-width: 768px) {
@@ -48,10 +64,18 @@ padding-bottom: 8vw;
           }
 
           .table{
-       
+            margin-top: 3vw;
             display: flex;
            
         
+          }
+          .pie-chart{
+            width: 35vw;
+            height: 35vw;
+          
+            display: flex;
+    justify-content: center;
+    align-items: center;
           }
         }
       .ring {
@@ -231,3 +255,5 @@ padding-bottom: 8vw;
       box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
       
     }
+
+  

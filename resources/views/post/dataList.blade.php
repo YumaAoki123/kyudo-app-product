@@ -31,11 +31,11 @@
 
                         <div class="input-daterange input-group" id="datepicker">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">開始日付</span>
+                                <span class="input-group-text">開始日</span>
                             </div>
                             <input type="text" class="input-sm form-control" name="from" />
                             <div class="input-group-append">
-                                <span class="input-group-text">終了日付</span>
+                                <span class="input-group-text">終了日</span>
                             </div>
                             <input type="text" class="input-sm form-control" name="to" />
                         </div>
@@ -48,6 +48,12 @@
 
             </form>
 
+
+            @if(session('false'))
+            <div class="alert alert-danger">
+                {{ session('false') }}
+            </div>
+            @endif
         </x-slot>
 
 
@@ -57,6 +63,7 @@
         @foreach ($dataByDate as $date => $dateData)
 
         <h2 class="heading-normal">{{ $date }}</h2>
+        
 
         @foreach ($dateData as $dateId => $posts)
 
@@ -69,7 +76,7 @@
                 <div class="container" id="container-{{$dateId}}">
                     <div class="row justify-content-center">
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 col-md-12">
                             <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
                                 <div class="ring ring-0"></div>
                                 <div class="ring ring-1"></div>
@@ -89,7 +96,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6 ">
+                        <div class="col-lg-6 col-md-12">
                             <table class="table">
                                 <tr>
                                     @for ($i = 1; $i <= 4; $i++)<th value='$i'>{{$i}}</th>@endfor
@@ -114,7 +121,7 @@
 
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 col-md-12">
                             <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
 
                                 @csrf
@@ -138,8 +145,6 @@
         @endforeach
         @endforeach
         @endif
-
-
 
 
         <!-- jQuery, popper.js, Bootstrap JS -->
