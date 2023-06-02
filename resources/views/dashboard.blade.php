@@ -47,9 +47,7 @@
                 マイページ
             </h2>
         </x-slot>
-        @php
-        $successRate = round($statisticsData['accuracy'],1)
-        @endphp
+
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -59,85 +57,56 @@
                         <h1 class="heading-normal">
                             本日の的中率
                         </h1>
-                        <div class="{{
-    ($successRate < 50) ? 'low-success-rate' : 
-    (($successRate < 80) ? 'medium-success-rate' : 'high-success-rate')
-}}">
-                            <div class="container">
+
+                        <div class="container">
 
 
-                                <div class="row justify-content-center">
+                            <div class="row justify-content-center">
 
-                                    <div class="col-lg-6 col-md-12">
+                                <div class="col-lg-6 col-md-12">
 
-                                        <div class="target" id="target">
+                                    <div class="target" id="target">
 
-                                            <div class="ring ring-1"></div>
-                                            <div class="ring ring-2"></div>
-                                            <div class="ring ring-3"></div>
-                                            <div class="ring ring-4"></div>
-                                            <div class="ring ring-5"></div>
-                                            <div class="ring ring-6"></div>
-
-                                            <!-- 的中したポイントを赤丸で表示 -->
-                                            @if(isset($posts) && count($posts) > 0)
-                                            @foreach ($posts as $post)
-                                            @php
-                                            $x = $post->pointX;
-                                            $y = $post->pointY;
-
-                                            @endphp
-                                            <div class="point" style="top: {{ $y * 100 }}%; left: {{ $x * 100 }}%;"></div>
-
-                                            @endforeach
-                                            @endif
+                                        <div class="ring ring-1"></div>
+                                        <div class="ring ring-2"></div>
+                                        <div class="ring ring-3"></div>
+                                        <div class="ring ring-4"></div>
+                                        <div class="ring ring-5"></div>
+                                        <div class="ring ring-6"></div>
 
 
 
 
 
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-6 col-md-12">
-
-                                        <table class="table">
-
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">項目</th>
-                                                    <th scope="col">値</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if(isset($posts) && count($posts) > 0)
-                                                <tr>
-
-                                                    <td>射数</td>
-                                                    <td>{{$statisticsData['totalCount']}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>的中回数</td>
-                                                    <td>{{ $statisticsData['hitCount'] }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>的中率</td>
-                                                    <td>{{ round($statisticsData['accuracy'],1) }}%</td>
-                                                </tr>
-                                                @endif
-                                            </tbody>
-                                        </table>
 
 
                                     </div>
-
-
-
                                 </div>
 
 
+                                @if(isset($dataByDate))
+                                @foreach ($dataByDate as $date => $dateData)
+                                <h3>Date: {{ $date }}</h3>
+                                <ul>
+                                    @foreach ($dateData as $dateId => $posts)
+                                    @php
+                                    $totalCount = count($posts);
+                                    $hitCount = 0;
+                                    foreach ($posts as $post) {
+                                    $x = $post->pointX - 0.5;
+                                    $y = $post->pointY - 0.5;
+                                    if ($x * $x + $y * $y <= 0.5 * 0.5) { $hitCount++; } } $accuracy=($totalCount> 0) ? ($hitCount / $totalCount) * 100 : 0;
+                                        @endphp
+                                        <li>date_id: {{ $dateId }} - 的中率: {{ $accuracy }}%</li>
+                                        @endforeach
+                                </ul>
+                                @endforeach
+
+                                @endif
+
                             </div>
+
+
                         </div>
 
                     </section>
@@ -162,8 +131,11 @@
                             <div class="col-lg-6 col-md-12">
                                 <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
                             </div>
-
+                            <div class="col-lg-6 col-md-12">
+                                <canvas id="lineChart" class="lineChart"></canvas>
+                            </div>
                     </div>
+
                     </section>
 
                 </div>
@@ -173,6 +145,91 @@
     </x-app-layout>
 
 
+    <script>
+        const dataByDate = @json($dataByDate);
+
+        const dataByDateSorted = Object.entries(dataByDate).sort(([dateIdA], [dateIdB]) => dateIdA - dateIdB);
+        const labels = [];
+        const data = [];
+
+        for (const [dateId, dateData] of dataByDateSorted) {
+            const dateLabels = [];
+            const dateDataPoints = [];
+
+            for (const date in dateData) {
+                const posts = dateData[date];
+                let dateTotalCount = 0; // date_idごとの総数
+                let dateHitCount = 0; // date_idごとの的中数
+
+                for (const post of posts) {
+                    const x = post.pointX - 0.5;
+                    const y = post.pointY - 0.5;
+
+                    if (x * x + y * y <= 0.5 * 0.5) {
+                        dateHitCount++; // 的中したポイントをカウント
+                    }
+                    dateTotalCount++; // ポイントの総数をカウント
+                }
+
+                const accuracy = (dateTotalCount > 0) ? (dateHitCount / dateTotalCount) * 100 : 0;
+                dateLabels.unshift(date);
+                dateDataPoints.unshift({
+                    dateId,
+                    accuracy
+                });
+            }
+
+            labels.unshift(...dateLabels.reverse());
+            data.unshift(...dateDataPoints.reverse());
+
+
+        }
+        const accuracyLabels = {
+            100: '皆中',
+            75: '三中',
+            50: '羽分',
+            25: '一中',
+            0: '残念'
+        };
+
+
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '直近十立ちの成績',
+                    data: data.map(({
+                        accuracy
+                    }) => accuracy),
+                    fill: false,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            stepSize: 5,
+                            callback: function(value, index, values) {
+                                return accuracyLabels[value];
+                            }
+                        }
+                    }
+                },
+
+                animation: true
+            }
+        });
+    </script>
 
 </body>
 
