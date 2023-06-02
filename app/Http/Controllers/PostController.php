@@ -49,6 +49,7 @@ class PostController extends Controller
                 ->where('user_id', $userId)
                 ->whereBetween('SelectedDate', [$start_date, $end_date])
                 ->orderBy('SelectedDate', 'asc')
+                ->orderBy('id', 'asc')
                 ->get();
 
             $dataByDate = [];
