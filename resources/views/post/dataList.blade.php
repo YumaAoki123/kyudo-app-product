@@ -7,16 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>弓道管理Pro</title>
-
     <link rel="stylesheet" href="{{ asset('css/dataListStyle.css') }}">
-
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
-
-</head>
-
-
 </head>
 
 <body>
@@ -25,10 +17,8 @@
         <x-slot name="header">
             <form method="POST" action="{{ route('post.showDataList') }}">
                 @csrf
-
                 <div class="row">
                     <div class="col-lg-6 col-md-12">
-
                         <div class="input-daterange input-group" id="datepicker">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">開始日</span>
@@ -39,15 +29,10 @@
                             </div>
                             <input type="text" class="input-sm form-control" name="to" />
                         </div>
-
                     </div>
                 </div>
-
-
                 <button type="submit" class="submit-button">決定</button>
-
             </form>
-
 
             @if(session('false'))
             <div class="alert alert-danger">
@@ -56,26 +41,15 @@
             @endif
         </x-slot>
 
-
-
-
         @if(isset($dataByDate))
         @foreach ($dataByDate as $date => $dateData)
-
         <h2 class="heading-normal">{{ $date }}</h2>
-        
 
         @foreach ($dateData as $dateId => $posts)
-
-
-
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-
                 <div class="container" id="container-{{$dateId}}">
                     <div class="row justify-content-center">
-
                         <div class="col-lg-6 col-md-12">
                             <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
                                 <div class="ring ring-0"></div>
@@ -101,51 +75,34 @@
                                 <tr>
                                     @for ($i = 1; $i <= 4; $i++)<th value='$i'>{{$i}}</th>@endfor
                                 </tr>
-
                                 <tr>
                                 <tr>
                                     @foreach ($posts as $post)
                                     <td>
-
                                         @php
                                         $x = $post->pointX - 0.5;
                                         $y = $post->pointY - 0.5;
                                         $isHit = ($x * $x + $y * $y <= 0.5 * 0.5); @endphp @if ($isHit) &#9675; @else &#10005; @endif </td>
 
                                             @endforeach
-
                                 </tr>
-
                             </table>
-
-
                         </div>
 
                         <div class="col-lg-6 col-md-12">
                             <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
-
                                 @csrf
                                 @method('DELETE')
-
                             </form>
                         </div>
                         <button type="button" class="delete-button" data-id="{{ $dateId }}">削除</button>
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </div>
-
-
-
         @endforeach
         @endforeach
         @endif
-
 
         <!-- jQuery, popper.js, Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -160,23 +117,23 @@
         <!-- bootstrap-datepickerの設定 -->
         <script>
             $('.input-daterange').datepicker({
-                    language: 'ja', // 日本語化
-                    format: 'yyyy/mm/dd', // 日付表示をyyyy/mm/ddにフォーマット
+                    language: 'ja',
+                    format: 'yyyy/mm/dd',
                 })
                 .on({
                     changeDate: function() {
                         // datepickerの日付を取得
-                        console.log('開始日付 :', $('input[name="from"]').val()); // 開始日付を取得
-                        console.log('終了日付 :', $('input[name="to"]').val()); // 終了日付を取得
+                        console.log('開始日付 :', $('input[name="from"]').val());
+                        console.log('終了日付 :', $('input[name="to"]').val());
                     }
                 });
         </script>
+
         <script>
             $(document).ready(function() {
                 $('.delete-button').on('click', function() {
                     var deleteButton = $(this);
                     var dataId = deleteButton.data('id');
-
                     if (confirm('本当に削除しますか？')) {
                         $.ajax({
                             url: "{{ route('post.destroy', '') }}" + '/' + dataId,
@@ -196,10 +153,7 @@
                                     alert(response.message);
                                 }
                             },
-
                         });
-
-
                     }
                 });
             });

@@ -17,7 +17,7 @@ use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/dashboard', [MyPageController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
@@ -34,8 +34,6 @@ Route::get('/post/create', [PostController::class, 'create'])->name('post.create
 Route::post('/post', [PostController::class, 'store'])->name('post.store');
 
 Route::post('/saveSelectedDate', [PostController::class, 'saveSelectedDate'])->name('post.saveSelectedDate');
-
-Route::get('/post/result', [PostController::class, 'result'])->name('post.result');
 
 Route::get('/post/index', [PostController::class, 'index'])->name('post.index');
 Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.process');

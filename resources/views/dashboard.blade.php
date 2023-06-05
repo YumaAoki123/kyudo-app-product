@@ -21,16 +21,25 @@
                     $.ajax({
                         type: "POST",
                         url: "{{route('post.saveSelectedDate')}}",
-                        dateFormat: 'yy-mm-dd',
+                        dataType: 'json',
                         data: {
                             selectedDate: dateText,
                             _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // セッション保存成功時の処理
+                                window.location.href = "{{route('post.create')}}";
+                            } else {
+                                console.log('セッション保存エラー');
+                                // エラーメッセージを表示するなどの処理を追加
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log('Ajaxエラー: ' + textStatus + ': ' + errorThrown);
+                            // エラーメッセージを表示するなどの処理を追加
+                            window.location.href = "{{route('home')}}"
                         }
-                    }).done(function() {
-                        // フォームにリダイレクトする
-                        window.location.href = "{{route('post.create')}}";
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus + ": " + errorThrown);
                     });
                 }
             });
@@ -40,110 +49,113 @@
 </head>
 
 <body>
-
+    @php
+    $successRate = $statisticsData['accuracy']
+    @endphp
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 マイページ
             </h2>
+            @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
         </x-slot>
-
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-
                     <section>
                         <h1 class="heading-normal">
-                            本日の的中率
+                            最近の稽古
                         </h1>
-
                         <div class="container">
-
-
                             <div class="row justify-content-center">
-
                                 <div class="col-lg-6 col-md-12">
-
-                                    <div class="target" id="target">
-
-                                        <div class="ring ring-1"></div>
-                                        <div class="ring ring-2"></div>
-                                        <div class="ring ring-3"></div>
-                                        <div class="ring ring-4"></div>
-                                        <div class="ring ring-5"></div>
-                                        <div class="ring ring-6"></div>
-
-
-
-
-
-
-
+                                    <h1 class="heading-small">
+                                        最近の成績
+                                    </h1>
+                                    <div class="chart-container">
+                                        <canvas id="lineChart" class="lineChart"></canvas>
                                     </div>
                                 </div>
 
-
-                                @if(isset($dataByDate))
-                                @foreach ($dataByDate as $date => $dateData)
-                                <h3>Date: {{ $date }}</h3>
-                                <ul>
-                                    @foreach ($dateData as $dateId => $posts)
-                                    @php
-                                    $totalCount = count($posts);
-                                    $hitCount = 0;
-                                    foreach ($posts as $post) {
-                                    $x = $post->pointX - 0.5;
-                                    $y = $post->pointY - 0.5;
-                                    if ($x * $x + $y * $y <= 0.5 * 0.5) { $hitCount++; } } $accuracy=($totalCount> 0) ? ($hitCount / $totalCount) * 100 : 0;
-                                        @endphp
-                                        <li>date_id: {{ $dateId }} - 的中率: {{ $accuracy }}%</li>
-                                        @endforeach
-                                </ul>
-                                @endforeach
-
-                                @endif
+                                <div class="col-lg-6 col-md-12">
+                                    <h1 class="heading-small">
+                                        本日の的中率
+                                    </h1>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>項目</th>
+                                                <th>値</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($posts) && count($posts) > 0)
+                                            <tr>
+                                                <td>射数</td>
+                                                <td> {{$statisticsData['totalCount']}} 射 </td>
+                                            </tr>
+                                            <tr>
+                                                <td>的中数</td>
+                                                <td> {{ $statisticsData['hitCount'] }} 回</td>
+                                            </tr>
+                                            <tr>
+                                                <td>的中率</td>
+                                                <td>{{ round($statisticsData['accuracy'],1) }} %</td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             </div>
-
-
                         </div>
-
                     </section>
 
+                    <section>
+                        <h1 class="heading-normal">
+                            稽古情報
+                        </h1>
+                        <div class="container">
+                            <div class="row">
 
+                                <section>
+                                    <h1 class="heading-small">
+                                        新規作成
+                                    </h1>
+                                    <div class="col-lg-6 col-md-12">
+                                        <div id="datepicker"></div>
+                                    </div>
+                                </section>
 
-                    <h1 class="heading-normal">
-                        新規作成
-                    </h1>
-                    <div class="container">
+                                <section>
+                                    <h1 class="heading-small">
+                                        統計情報
+                                    </h1>
+                                    <div class="container">
+                                        <div class="button-container">
+                                            <div class="column">
+                                                <a href="{{ route('post.index') }}" class="btn btn-pageChange btn--cubic btn--shadow">統計データ詳細</a>
+                                            </div>
+                                            <div class="column">
+                                                <a href="{{ route('post.dataList') }}" class="btn btn-pageChange btn--cubic btn--shadow" style="margin-left: 14px; margin-top: 40px;">データ一覧</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
 
-                        <section>
-
-                            <div class="col-lg-6 col-md-12">
-
-                                <div id="datepicker"></div>
                             </div>
-
-                            <div class="col-lg-6 col-md-12">
-                                <a href="{{ route('post.dataList') }}" class="btn btn-primary btn-custom">データの編集と削除</a>
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <a href="{{ route('post.index') }}" class="btn btn-primary btn-custom">詳細を表示</a>
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <canvas id="lineChart" class="lineChart"></canvas>
-                            </div>
-                    </div>
-
+                        </div>
                     </section>
 
                 </div>
             </div>
         </div>
-
     </x-app-layout>
-
 
     <script>
         const dataByDate = @json($dataByDate);
@@ -158,8 +170,8 @@
 
             for (const date in dateData) {
                 const posts = dateData[date];
-                let dateTotalCount = 0; // date_idごとの総数
-                let dateHitCount = 0; // date_idごとの的中数
+                let dateTotalCount = 0;
+                let dateHitCount = 0;
 
                 for (const post of posts) {
                     const x = post.pointX - 0.5;
@@ -182,7 +194,6 @@
             labels.unshift(...dateLabels.reverse());
             data.unshift(...dateDataPoints.reverse());
 
-
         }
         const accuracyLabels = {
             100: '皆中',
@@ -192,19 +203,19 @@
             0: '残念'
         };
 
-
         const ctx = document.getElementById('lineChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: '直近十立ちの成績',
+                    label: '最近10立の結果',
                     data: data.map(({
                         accuracy
                     }) => accuracy),
                     fill: false,
                     borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: "rgb(0, 69, 87)",
                     borderWidth: 2
                 }]
             },
@@ -212,7 +223,12 @@
                 responsive: true,
                 scales: {
                     x: {
-                        display: false
+                        ticks: {
+                            display: false,
+                        },
+                        grid: {
+                            display: true,
+                        },
                     },
                     y: {
                         beginAtZero: true,
@@ -222,11 +238,15 @@
                             callback: function(value, index, values) {
                                 return accuracyLabels[value];
                             }
-                        }
+                        },
                     }
                 },
-
-                animation: true
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                animation: true,
             }
         });
     </script>

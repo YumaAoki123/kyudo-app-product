@@ -24,16 +24,15 @@
         margin-top: 1vw;
 
       }
+    
      .table{
       margin-top: 25vw;
       display: flex;
        }
 
-       .pie-chart{
-        width: 85vw;
-        height: 85vw;
-        display:flex;
-      
+      .pie-chart{
+        margin-left: 2vw;
+
       }
 
       .chart-legend {
@@ -67,16 +66,13 @@ padding-bottom: 8vw;
             margin-top: 3vw;
             display: flex;
            
-        
           }
           .pie-chart{
+            margin-left: 3vw;
             width: 35vw;
             height: 35vw;
-          
-            display: flex;
-    justify-content: center;
-    align-items: center;
           }
+        
         }
       .ring {
         position: absolute;
@@ -96,46 +92,46 @@ padding-bottom: 8vw;
       }
       
       .ring-2 {
-        width: 80%;
-        height: 80%;
-        top: 10%;
-        left: 10%;
+        width: 82%;
+      height: 82%;
+      top: 8.9%;
+      left: 8.9%;
         background-color: #a4eafc;
         border-radius: 50%;
       }
       
       .ring-3 {
-        width: 60%;
-        height: 60%;
-        top: 20%;
-        left: 20%;
+        width: 66%;
+        height: 66%;
+        top: 16.8%;
+        left: 16.8%;
         background-color: #62c5f3;
         border-radius: 50%;
       }
       
       .ring-4 {
-        width: 40%;
-        height: 40%;
-        top: 30%;
-        left: 30%;
+        width: 57%;
+        height: 57%;
+        top: 21.2%;
+        left: 21.2%;
         background-color: #a4eafc;
         border-radius: 50%;
       }
       
       .ring-5 {
-        width: 20%;
-        height: 20%;
-        top: 40%;
-        left: 40%;
+        width: 40%;
+      height: 40%;
+      top: 29.8%;
+      left: 29.8%;
         background-color: #62c5f3;
         border-radius: 50%;
       }
       
       .ring-6 {
-        width: 6%;
-        height: 6%;
-        top: 47%;
-        left: 47%;
+        width: 20%;
+      height: 20%;
+      top: 39.8%;
+      left: 39.8%;
         background-color: #a4eafc;
         border-radius: 50%;
       }
