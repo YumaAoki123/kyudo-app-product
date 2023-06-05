@@ -4,15 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>弓道管理Pro</title>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
 </head>
 
 <body>
@@ -20,20 +16,17 @@
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <p>日付: {{ $selectedDate }}</p>
-
             </h2>
             @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
             @endif
-
             @if(session('false'))
             <div class="alert alert-danger">
                 {{ session('false') }}
             </div>
             @endif
-
         </x-slot>
 
         <div class="py-12">
@@ -53,26 +46,14 @@
                                     <div class="ring ring-4"></div>
                                     <div class="ring ring-5"></div>
                                     <div class="ring ring-6"></div>
-
                                 </div>
                             </div>
                         </div>
 
-
-
-
-
-                        <br>
-                        <br>
-                        <br>
-
-
                         <div class="row justify-content-center">
-                            <div class="col-lg-6 col-md-12" style="display:flex;">
+                            <div class="col-lg-6 col-md-12" style="display:flex; margin-top: 65px;">
                                 <form action="{{ route('post.store') }}" method="POST">
-
                                     @csrf
-
                                     <div class="shot-count">
                                         回数:
                                         <select id="shotCountSelect" name="shotCount">
@@ -84,7 +65,6 @@
                                             ?>
                                         </select>
                                         射
-
                                     </div>
                                 </form>
                                 <button id="clear-button" class="btn btn-clear btn--cubic btn--shadow">クリア</button>
@@ -94,15 +74,11 @@
 
                     </div>
 
-
                 </div>
             </div>
         </div>
 
-
     </x-app-layout>
-
-
 
     <!-- jQuery, popper.js, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -117,10 +93,7 @@
     <script src="{{ asset('js/script.js') }}"></script>
 
     <script>
-        // ルート名をデータ属性として設定
         const postStoreRoute = "{{ route('post.store') }}";
-
-        console.log("CSRF Token: ", "{{ csrf_token() }}");
     </script>
 </body>
 

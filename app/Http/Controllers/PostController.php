@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use App\Models\Date;
 use Illuminate\Support\Facades\DB;
@@ -26,15 +25,8 @@ class PostController extends Controller
         return view('post.dataList');
     }
 
-    public function result()
-    {
-        return view('post.result');
-    }
-
     public function showDataList(Request $request)
     {
-
-
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
             $end_date = $request->input('to');
@@ -75,15 +67,13 @@ class PostController extends Controller
         }
     }
 
-
     public function getPostData(Request $request)
     {
-
         if ($request->has('from') && $request->has('to')) {
             $start_date = $request->input('from');
             $end_date = $request->input('to');
 
-            $userId = auth()->user()->id; // ログインユーザのIDを取得するなど、適切な方法でユーザIDを取得してください
+            $userId = auth()->user()->id;
 
             // 日付テーブルと的中データテーブルのリレーションを考慮してデータを取得
             $posts = Post::whereHas('date', function ($query) use ($start_date, $end_date, $userId) {
@@ -113,12 +103,11 @@ class PostController extends Controller
             if ($x * $x + $y * $y <= 0.5 * 0.5) {
                 $hitCount++; // 的中したポイントをカウント
             } else {
-                $missCount++; // 外れたポイントをカウント
+                $missCount++;
             }
         }
 
         $accuracy = ($totalCount > 0) ? ($hitCount / $totalCount) * 100 : 0;
-
 
         $firstShotTotalCounts = [];
         $firstShotHitCounts = [];
@@ -156,15 +145,12 @@ class PostController extends Controller
             'hitCount' => $hitCount,
             'missCount' => $missCount,
             'accuracy' => $accuracy,
-
             'firstShotTotalCounts' => $firstShotTotalCounts,
             'firstShotHitCounts' => $firstShotHitCounts,
             'firstShotMissCounts' =>  $firstShotMissCounts,
             'firstShotAccuracies' => $firstShotAccuracies,
             'firstShotLabels' => $firstShotLabels
         ];
-
-
 
         $dateStatistics = [];
 
@@ -183,7 +169,6 @@ class PostController extends Controller
 
             $x = $post->pointX - 0.5;
             $y = $post->pointY - 0.5;
-
             // 円の公式以内なら的中している。
             if ($x * $x + $y * $y <= 0.5 * 0.5) {
                 $dateStatistics[$dateId]['totalHits']++; // 的中回数をカウント
@@ -208,8 +193,6 @@ class PostController extends Controller
         }
 
         $countTotalCount = count($results);
-
-
         $targetAccuracies = ['1', '0.75', '0.5', '0.25', '0'];
         $countLabels = ['皆中', '三中', '羽分', '一中', '残念'];
         $countResults = [];
@@ -227,8 +210,6 @@ class PostController extends Controller
             'totalCount' => $countTotalCount,
             'countLabels' => $countLabels,
         ];
-
-
 
         //4象限の的中確率
         $topLeftCount = 0;
@@ -274,11 +255,12 @@ class PostController extends Controller
     {
         $selectedDate = $request->input('selectedDate');
 
-        // セッションに日付を保存
-        $request->session()->put('selected_date', $selectedDate);
-
-
-        return response()->json(['success' => true]);
+        if ($selectedDate) {
+            $request->session()->put('selected_date', $selectedDate);
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'error' => 'セッション保存エラー']);
+        }
     }
 
     public function create(Request $request)
@@ -295,11 +277,9 @@ class PostController extends Controller
         // 日付をビューに渡して表示する
         return view('post.create')->with('selectedDate', $selectedDate);
     }
-
     /**
      * Store a newly created resource in storage.
      */
-
 
     public function store(Request $request)
     {
@@ -308,7 +288,6 @@ class PostController extends Controller
 
         if (empty($data)) {
             // データが空の場合の処理
-
             session()->flash('false', 'データが空です');
             return response()->json([
                 'redirect_url' => route('post.create')
@@ -345,7 +324,6 @@ class PostController extends Controller
             ]);
         }
 
-
         $selectedDate = $request->session()->get('selected_date');
         try {
             DB::beginTransaction();
@@ -377,17 +355,9 @@ class PostController extends Controller
         }
     }
 
-
-
-
-
-
     /**
      * Display the specified resource.
      */
-
-
-
 
     public function show(Post $post)
     {
@@ -415,7 +385,6 @@ class PostController extends Controller
      */
     public function destroy($dateId)
     {
-
         try {
             DB::beginTransaction();
             // 該当のdate_idに紐づくpostsデータを削除
@@ -424,7 +393,6 @@ class PostController extends Controller
             // 該当のdate_idに紐づくdatesデータを削除
             Date::where('id', $dateId)->delete();
             DB::commit();
-
 
             // 削除が成功した場合は成功のレスポンスを返す
             return response()->json(['status' => 'success']);
