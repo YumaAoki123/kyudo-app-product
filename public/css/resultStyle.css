@@ -1,0 +1,255 @@
+
+
+@media (max-width: 767px) {
+  .container {
+    padding-top: 20vw;
+    flex-direction: column;
+  }
+  .target {
+ 
+      width: 50vw;
+      height: 50vw;
+      border-radius: 50%;
+      background-color: #fff;
+      position: relative;
+      display: flex;
+      top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+      justify-content: center;
+      align-items: center;
+      
+      }
+      table.table-striped{
+        margin-top: 1vw;
+
+      }
+    
+     .table{
+      margin-top: 25vw;
+      display: flex;
+       }
+
+      .pie-chart{
+        margin-left: 2vw;
+
+      }
+
+      .chart-legend {
+        text-align: center;
+        margin-top: 10px;
+      }
+        }
+
+    @media (min-width: 768px) {
+      .container {
+padding-top: 8vw;
+padding-bottom: 8vw;
+        flex-direction: row;}
+
+      .target {
+    
+          width: 20vw;
+          height: 20vw;
+          border-radius: 50%;
+          background-color: #fff;
+          position: relative;
+          display: flex;
+          top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+          justify-content: center;
+          align-items: center;
+          }
+
+          .table{
+            margin-top: 3vw;
+            display: flex;
+           
+          }
+          .pie-chart{
+            margin-left: 3vw;
+            width: 35vw;
+            height: 35vw;
+          }
+        
+        }
+      .ring {
+        position: absolute;
+        box-sizing: border-box;
+      }
+      
+      .ring-0 {
+        width: 170%;
+        height: 170%;
+        background-color: #a4eafc;
+      }
+      .ring-1 {
+        width: 100%;
+        height: 100%;
+        background-color: #62c5f3;
+        border-radius: 50%;
+      }
+      
+      .ring-2 {
+        width: 82%;
+      height: 82%;
+      top: 8.9%;
+      left: 8.9%;
+        background-color: #a4eafc;
+        border-radius: 50%;
+      }
+      
+      .ring-3 {
+        width: 66%;
+        height: 66%;
+        top: 16.8%;
+        left: 16.8%;
+        background-color: #62c5f3;
+        border-radius: 50%;
+      }
+      
+      .ring-4 {
+        width: 57%;
+        height: 57%;
+        top: 21.2%;
+        left: 21.2%;
+        background-color: #a4eafc;
+        border-radius: 50%;
+      }
+      
+      .ring-5 {
+        width: 40%;
+      height: 40%;
+      top: 29.8%;
+      left: 29.8%;
+        background-color: #62c5f3;
+        border-radius: 50%;
+      }
+      
+      .ring-6 {
+        width: 20%;
+      height: 20%;
+      top: 39.8%;
+      left: 39.8%;
+        background-color: #a4eafc;
+        border-radius: 50%;
+      }
+      
+      .point {
+          width: 6px;
+          height: 6px;
+          background-color: rgb(0, 183, 255,0.8);
+          border-radius: 50%;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid rgb(111, 0, 255,0.9);
+          box-sizing: border-box;
+        }
+  
+        
+        .quadrant {
+          position: absolute;
+          width: 50%;
+          height: 50%;
+          background-color: rgba(0, 60, 255, 0.2);
+          z-index: 1; /* 4象限の優先度を設定 */
+          border: 1px solid #000; /* ボーダーの色を設定 */
+        }
+        
+        #quadrant1 {
+          top: 0;
+          left: 0;
+        
+        }
+        
+        #quadrant2 {
+          top: 0;
+          right: 0;
+          
+        }
+        
+        #quadrant3 {
+          bottom: 0;
+          left: 0;
+      
+        }
+        
+        #quadrant4 {
+          bottom: 0;
+          right: 0;
+   
+        }
+        
+        .percentage {
+          position: absolute;
+                    top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 16px;
+          font-weight: bold;
+          pointer-events: none;
+          z-index: 2; /* パーセンテージの優先度を設定 */
+       
+        }
+        
+        #percentage1 {
+        color: red;
+    
+        }
+        
+        #percentage2 {
+          color: red;
+        }
+        
+        #percentage3 {
+          color: red;
+        }
+        
+        #percentage4 {
+          color: red;
+        }
+
+        .heading-normal {
+          font-size: 125%;
+          font-weight: bold;
+          line-height: 170%;
+          border-bottom: 2px solid #e2750f;
+          margin: 20px 0 15px;
+      }
+
+      .heading-small {
+        margin-top: 10px;
+        font-size: 115%;
+        font-weight: bold;
+        line-height: 130%;
+        border-left: 5px solid #e2750f;
+        padding-left: 7px;
+        
+    }
+
+    button.submit-button {
+         
+      margin-top: 3px;
+      color: #fff;
+      background-color: #51a351;
+      border-bottom: 2px solid #326e32;
+  }   
+  button.submit-button:hover {
+    margin-top: 3px;
+    color: #fff;
+    background: #51a351;
+    border-bottom: 2px solid #326e32;
+    
+  }
+
+    button.btn--shadow {
+      -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+      
+    }
+
+  

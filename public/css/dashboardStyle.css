@@ -1,0 +1,84 @@
+
+
+@media (min-width: 768px) {
+.container
+   {
+    flex-direction: row;
+  }
+table{
+  margin-top: 2vw;
+}
+.row {
+ display: flex;
+ justify-content: space-around;
+}
+.chart-container {
+  width: 450px; /* チャートの幅を調整 */
+ margin-top: 22px;
+}
+    }
+   
+
+@media (max-width: 767px) {
+     .container {
+                  flex-direction: column;}
+                  table{
+                    margin-top: 2vw;
+                  }
+                  .row {
+                    justify-content: center;
+          align-items: center;
+                  }
+                  .chart-container {
+                                     margin-top: 10px;
+                  }
+                }
+               
+          .heading-normal {
+            font-size: 125%;
+            font-weight: bold;
+            line-height: 170%;
+            border-bottom: 2px solid #e2750f;
+            margin: 20px 0 15px;
+        }
+        
+        .heading-small {
+          margin-top: 10px;
+          font-size: 115%;
+          font-weight: bold;
+          line-height: 130%;
+          border-left: 5px solid #e2750f;
+          padding-left: 7px;
+          
+      }
+          
+      a.btn--shadow {
+        -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+        box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+        
+      }
+
+      a.btn-pageChange {
+        color: white;
+        font-weight: bold;
+        background-color: #51a351;
+        border-bottom: 5px solid #326e32;
+     
+      }
+      a.btn-pageChange:hover {
+        margin-top: 3px;
+              color: black;
+              font-weight: bold;
+        background: #51a351;
+        border-bottom: 2px solid #326e32;
+        
+      }
+
+      .button-container {
+        border: 1px solid #ccc; 
+       
+        padding: 60px;
+      background-color: rgb(255, 253, 250);
+      }
+
+     

@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MyPageController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,12 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [MyPageController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,4 +28,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
+Route::post('/post', [PostController::class, 'store'])->name('post.store');
+
+Route::post('/saveSelectedDate', [PostController::class, 'saveSelectedDate'])->name('post.saveSelectedDate');
+
+Route::get('/post/index', [PostController::class, 'index'])->name('post.index');
+Route::post('/post/index', [PostController::class, 'getPostData'])->name('post.process');
+
+Route::get('/post/dataList', [PostController::class, 'dataList'])->name('post.dataList');
+Route::post('/post/dataList', [PostController::class, 'showDataList'])->name('post.showDataList');
+
+Route::delete('/post/{date_id}', [PostController::class, 'destroy'])->name('post.destroy');
