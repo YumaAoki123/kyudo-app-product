@@ -53,7 +53,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="target" id="target" style="display: flex; justify-content: center; align-items: center;">
-                                        <div class="ring ring-0">
+                                        <div class="circle circle-0">
                                             <div class="quadrant" id="quadrant1">
                                                 @if(isset($percentageData))
                                                 <div class="percentage" id="percentage1">{{ round($percentageData['topLeftPercentage'],1) }}%</div>
@@ -76,12 +76,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="ring ring-1"></div>
-                                        <div class="ring ring-2"></div>
-                                        <div class="ring ring-3"></div>
-                                        <div class="ring ring-4"></div>
-                                        <div class="ring ring-5"></div>
-                                        <div class="ring ring-6"></div>
+                                        <div class="circle circle-1"></div>
+                                        <div class="circle circle-2"></div>
+                                        <div class="circle circle-3"></div>
+                                        <div class="circle circle-4"></div>
+                                        <div class="circle circle-5"></div>
+                                        <div class="circle circle-6"></div>
 
                                         <!-- 的中したポイントを赤丸で表示 -->
                                         @if(isset($posts) && count($posts) > 0)
