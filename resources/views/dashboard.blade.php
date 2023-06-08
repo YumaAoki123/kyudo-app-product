@@ -94,20 +94,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(isset($posts) && count($posts) > 0)
                                             <tr>
                                                 <td>射数</td>
-                                                <td> {{$statisticsData['totalCount']}} 射 </td>
+                                                <td> {{$statisticsData['totalCount']?? 0}} 射 </td>
                                             </tr>
                                             <tr>
                                                 <td>的中数</td>
-                                                <td> {{ $statisticsData['hitCount'] }} 回</td>
+                                                <td> {{ $statisticsData['hitCount']?? 0 }} 回</td>
                                             </tr>
                                             <tr>
                                                 <td>的中率</td>
-                                                <td>{{ round($statisticsData['accuracy'],1) }} %</td>
+                                                <td>{{ round($statisticsData['accuracy']?? 0,1) }} %</td>
                                             </tr>
-                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -151,7 +149,6 @@
                             </div>
                         </div>
                     </section>
-
                 </div>
             </div>
         </div>
@@ -159,6 +156,7 @@
 
     <script>
         const dataByDate = @json($dataByDate);
+        const dateIdLabels = @json($dateIdLabels);
 
         const dataByDateSorted = Object.entries(dataByDate).sort(([dateIdA], [dateIdB]) => dateIdA - dateIdB);
         const labels = [];
@@ -184,7 +182,7 @@
                 }
 
                 const accuracy = (dateTotalCount > 0) ? (dateHitCount / dateTotalCount) * 100 : 0;
-                dateLabels.unshift(date);
+                dateLabels.unshift(dateId);
                 dateDataPoints.unshift({
                     dateId,
                     accuracy
@@ -211,8 +209,12 @@
                 datasets: [{
                     label: '最近10立の結果',
                     data: data.map(({
+                        dateId,
                         accuracy
-                    }) => accuracy),
+                    }) => ({
+                        x: dateId,
+                        y: accuracy
+                    })),
                     fill: false,
                     borderColor: 'rgba(54, 162, 235, 1)',
                     backgroundColor: "rgb(0, 69, 87)",
@@ -223,14 +225,13 @@
                 responsive: true,
                 scales: {
                     x: {
-                        ticks: {
-                            display: false,
-                        },
+                        display: false,
                         grid: {
                             display: true,
                         },
                     },
                     y: {
+                        max: 100,
                         beginAtZero: true,
                         ticks: {
                             precision: 0,

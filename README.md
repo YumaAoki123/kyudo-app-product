@@ -7,13 +7,14 @@
 
 ## 使用技術
 
--   PHP v8.2.4
+-   PHP v8.2.5
 -   Laravel v10.10.1
 -   Laravel Breeze v1.21
 -   Bootstrap v4.5.0
 -   jQuery v3.6.0
--   chart.js v4.3.0
+-   Chart.js v4.3.0
 -   Ajax
+-   MariaDb v10.5
 -   Linux
 -   Xserver
 
@@ -21,6 +22,7 @@
 
 -   Ajax 通信を一部用いてユーザエクスペリエンスの向上。
 -   N+1 問題を回避するために、Eager Loading を意識したデータ取得。
+-   データの整合性を重視した処理の実施。
 
 ## 苦労した点
 
