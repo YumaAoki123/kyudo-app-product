@@ -230,6 +230,40 @@
                 });
         </script>
 
+        @if(isset($statisticsData))
+        <script>
+            const labels2 = @json($statisticsData['firstShotLabels']);
+            const data2 = @json(array_values($statisticsData['firstShotAccuracies']));
+            const ctx2 = document.getElementById('anotherChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: labels2,
+                    datasets: [{
+                        label: '的中率',
+                        data: data2,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            max: 100,
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 0,
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        @endif
+
         @if(isset($countData))
         <script>
             // データの取得
@@ -282,39 +316,6 @@
                         }
                     },
                     animation: true,
-                }
-            });
-        </script>
-        @endif
-
-        @if(isset($statisticsData))
-        <script>
-            const labels2 = @json($statisticsData['firstShotLabels']);
-            const data2 = @json(array_values($statisticsData['firstShotAccuracies']));
-            const ctx2 = document.getElementById('anotherChart').getContext('2d');
-            new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: labels2,
-                    datasets: [{
-                        label: '的中率',
-                        data: data2,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                stepSize: 0,
-                            }
-                        }
-                    }
                 }
             });
         </script>

@@ -80,15 +80,18 @@ class MyPageController extends Controller
             ->get();
 
         $dataByDate = [];
+        $dateIdLabels = [];
         foreach ($dates as $date) {
             foreach ($date->posts as $post) {
                 $dataByDate[$date->SelectedDate][$post->date_id][] = $post;
+                $dateIdLabels[$post->date_id] = $date->SelectedDate;
             }
         }
         return view('dashboard', [
             'dataByDate' => $dataByDate,
             'posts' => $posts,
             'statisticsData' => $statisticsData,
+            'dateIdLabels' => $dateIdLabels,
         ]);
     }
 }
