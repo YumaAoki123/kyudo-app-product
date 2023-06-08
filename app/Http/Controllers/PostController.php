@@ -157,6 +157,13 @@ class PostController extends Controller
         foreach ($posts as $post) {
             $dateId = $post->date_id;
 
+            // shotCountが4でない場合はスキップ
+            $shotCount = $post->shotCount;
+
+            if ($shotCount != 4) {
+                continue;
+            }
+
             if (!isset($dateStatistics[$dateId])) {
                 // 初回のデータなら初期化
                 $dateStatistics[$dateId] = [

@@ -23,7 +23,7 @@
             body {
                 height: 100vh;
                 width: 100%;
-                background-image: url("{{ asset('images/home.jpg') }}");
+                background-image: url("{{ asset('images/homeImage.jpg') }}");
                 background-size: cover;
                 background-position: center;
             }
@@ -99,7 +99,7 @@
             body {
                 height: 100vh;
                 width: 100%;
-                background-image: url("{{ asset('images/home.jpg') }}");
+                background-image: url("{{ asset('images/homeImage.jpg') }}");
                 background-size: cover;
                 background-position: center;
             }
