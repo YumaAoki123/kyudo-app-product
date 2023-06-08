@@ -231,7 +231,7 @@
                         },
                     },
                     y: {
-                        max: 100,
+                        max: 105,
                         beginAtZero: true,
                         ticks: {
                             precision: 0,
