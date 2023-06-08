@@ -15,8 +15,8 @@
 -   Chart.js v4.3.0
 -   Ajax
 -   MariaDb v10.5
+-   apache v2.4.6
 -   Linux
--   Xserver
 
 ## 工夫した点
 
