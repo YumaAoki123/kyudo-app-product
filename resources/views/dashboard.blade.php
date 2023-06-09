@@ -38,7 +38,7 @@
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log('Ajaxエラー: ' + textStatus + ': ' + errorThrown);
                             // エラーメッセージを表示するなどの処理を追加
-                            window.location.href = "{{route('home')}}"
+                            window.location.href = "{{route('logout')}}"
                         }
                     });
                 }
@@ -225,13 +225,19 @@
                 responsive: true,
                 scales: {
                     x: {
-                        display: false,
                         grid: {
                             display: true,
+                            drawTicks: false // ラベルの表示を非表示にする
                         },
+                        ticks: {
+                            display: false // ラベルの表示を非表示にする
+                        }
                     },
                     y: {
                         max: 105,
+                        grid: {
+                            display: true
+                        },
                         beginAtZero: true,
                         ticks: {
                             precision: 0,
