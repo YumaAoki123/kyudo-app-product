@@ -42,3 +42,5 @@ Route::get('/post/dataList', [PostController::class, 'dataList'])->name('post.da
 Route::post('/post/dataList', [PostController::class, 'showDataList'])->name('post.showDataList');
 
 Route::delete('/post/{date_id}', [PostController::class, 'destroy'])->name('post.destroy');
+
+Route::get('/logout', [PostController::class, 'logout'])->name('logout');

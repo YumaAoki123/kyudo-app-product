@@ -9,6 +9,7 @@ use App\Models\Date;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -274,15 +275,22 @@ class PostController extends Controller
     {
         // セッションから日付を取得する
         $selectedDate = $request->session()->get('selected_date');
-        $selectedDate = Carbon::createFromFormat('m/d/Y', $selectedDate)->format('Y年m月d日');
-        // 日付が存在しない場合は、セッションIDを削除してログアウトする
         if (!$selectedDate) {
-            $request->session()->invalidate();
-            return redirect('/login')->with('error', 'Invalid access. Please login again.');
+            return redirect(route('logout'))->with('error', 'Date not found. Please try again.');
         }
+
+        $selectedDate = Carbon::createFromFormat('m/d/Y', $selectedDate)->format('Y年m月d日');
 
         // 日付をビューに渡して表示する
         return view('post.create')->with('selectedDate', $selectedDate);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        // ログイン画面にリダイレクト
+        return redirect('/login');
     }
     /**
      * Store a newly created resource in storage.
