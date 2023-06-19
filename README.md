@@ -15,6 +15,7 @@
 -   jQuery v3.6.0
 -   Chart.js v4.3.0
 -   Ajax
+-   PHPUnit v10.1.2
 -   MariaDB v10.5
 -   Apache v2.4.6
 -   Linux
