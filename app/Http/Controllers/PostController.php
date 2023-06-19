@@ -41,9 +41,10 @@ class PostController extends Controller
             }])
                 ->where('user_id', $userId)
                 ->whereBetween('SelectedDate', [$start_date, $end_date])
-                ->orderBy('SelectedDate', 'asc')
-                ->orderBy('id', 'asc')
-                ->get();
+
+                ->paginate(5);
+
+            $groupedDates = $dates->groupBy('SelectedDate');
 
             $dataByDate = [];
             foreach ($dates as $date) {
@@ -59,11 +60,12 @@ class PostController extends Controller
             }
 
             return view('post.dataList', [
-                'dataByDate' => $dataByDate,
+                'dates' => $dates,
+                'groupedDates' => $groupedDates
             ]);
         } else {
             return view('post.dataList', [
-                'dataByDate' => [],
+                'dates' => [],
             ]);
         }
     }

@@ -103,6 +103,15 @@
         @endforeach
         @endforeach
         @endif
+        @if(isset($dates))
+        @foreach ($dates as $date)
+        <h2 class="heading-normal"> {{$date->SelectedDate}}</h2>
+
+        @endforeach
+        @endif
+
+        <div> {{ $dates->appends(Request::query())->links() }}</div>
+
 
         <!-- jQuery, popper.js, Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
