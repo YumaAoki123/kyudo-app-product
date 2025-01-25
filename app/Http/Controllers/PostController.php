@@ -52,6 +52,7 @@ class PostController extends Controller
                     $dataByDate[$date->SelectedDate][$post->date_id][] = $post;
                 }
             }
+            // dd($dataByDate);
 
             if ($dates->isEmpty()) {
                 // データが空の場合の処理
@@ -61,11 +62,13 @@ class PostController extends Controller
 
             return view('post.dataList', [
                 'dates' => $dates,
-                'groupedDates' => $groupedDates
+                'groupedDates' => $groupedDates,
+                'dataByDate' => $dataByDate
             ]);
         } else {
+            // パラメータが不足している場合も安全に空の値を渡す
             return view('post.dataList', [
-                'dates' => [],
+                'dates' => collect(), // 空のコレクションを渡す
             ]);
         }
     }
