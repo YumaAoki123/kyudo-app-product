@@ -42,8 +42,9 @@ class PostController extends Controller
                 ->where('user_id', $userId)
                 ->whereBetween('SelectedDate', [$start_date, $end_date])
                 ->orderBy('SelectedDate', 'asc')
-                ->orderBy('id', 'asc')
-                ->get();
+                ->paginate(5);
+
+            $groupedDates = $dates->groupBy('SelectedDate');
 
             $dataByDate = [];
             foreach ($dates as $date) {
@@ -51,6 +52,7 @@ class PostController extends Controller
                     $dataByDate[$date->SelectedDate][$post->date_id][] = $post;
                 }
             }
+            // dd($dataByDate);
 
             if ($dates->isEmpty()) {
                 // データが空の場合の処理
@@ -59,11 +61,14 @@ class PostController extends Controller
             }
 
             return view('post.dataList', [
-                'dataByDate' => $dataByDate,
+                'dates' => $dates,
+                'groupedDates' => $groupedDates,
+                'dataByDate' => $dataByDate
             ]);
         } else {
+            // パラメータが不足している場合も安全に空の値を渡す
             return view('post.dataList', [
-                'dataByDate' => [],
+                'dates' => collect(), // 空のコレクションを渡す
             ]);
         }
     }

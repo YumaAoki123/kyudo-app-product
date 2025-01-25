@@ -15,8 +15,8 @@
 
     <x-app-layout>
         <x-slot name="header">
-            <form method="POST" action="{{ route('post.showDataList') }}">
-                @csrf
+            <form method="GET" action="{{ route('post.showDataList') }}">
+
                 <div class="row">
                     <div class="col-lg-6 col-md-12">
                         <div class="input-daterange input-group" id="datepicker">
@@ -91,7 +91,7 @@
 
                         <div class="col-lg-6 col-md-12">
                             <form id="deleteForm{{ $dateId }}" action="{{ route('post.destroy', $dateId) }}" method="post">
-                                @csrf
+
                                 @method('DELETE')
                             </form>
                         </div>
@@ -103,6 +103,17 @@
         @endforeach
         @endforeach
         @endif
+
+
+        <div>
+            @if(isset($dates) && $dates->isNotEmpty())
+            {{ $dates->appends(Request::query())->links() }}
+            @else
+            <p>データがありません。</p>
+            @endif
+        </div>
+
+
 
         <!-- jQuery, popper.js, Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
